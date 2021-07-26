@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Shelly-OTA-Win": {
+      "commandName": "Project"
+    }
+  }
+}

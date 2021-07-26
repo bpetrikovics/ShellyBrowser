@@ -1,0 +1,161 @@
+﻿
+namespace Shelly_OTA_Win
+{
+    partial class OTABrowser
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.BrowserLabel = new System.Windows.Forms.Label();
+            this.StatusStrip = new System.Windows.Forms.StatusStrip();
+            this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.DeviceCountLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.DeviceListView = new System.Windows.Forms.ListView();
+            this.DeviceName = new System.Windows.Forms.ColumnHeader();
+            this.DeviceMAC = new System.Windows.Forms.ColumnHeader();
+            this.DeviceIP = new System.Windows.Forms.ColumnHeader();
+            this.DeviceModel = new System.Windows.Forms.ColumnHeader();
+            this.DeviceFirmware = new System.Windows.Forms.ColumnHeader();
+            this.StatusStrip.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // BrowserLabel
+            // 
+            this.BrowserLabel.AutoSize = true;
+            this.BrowserLabel.Location = new System.Drawing.Point(13, 16);
+            this.BrowserLabel.Name = "BrowserLabel";
+            this.BrowserLabel.Size = new System.Drawing.Size(165, 15);
+            this.BrowserLabel.TabIndex = 2;
+            this.BrowserLabel.Text = "Devices found on the network";
+            this.BrowserLabel.UseWaitCursor = true;
+            // 
+            // StatusStrip
+            // 
+            this.StatusStrip.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.StatusLabel,
+            this.DeviceCountLabel});
+            this.StatusStrip.Location = new System.Drawing.Point(0, 428);
+            this.StatusStrip.Name = "StatusStrip";
+            this.StatusStrip.Size = new System.Drawing.Size(800, 22);
+            this.StatusStrip.TabIndex = 3;
+            this.StatusStrip.Text = "statusStrip1";
+            this.StatusStrip.UseWaitCursor = true;
+            // 
+            // StatusLabel
+            // 
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(70, 17);
+            this.StatusLabel.Text = "Initializing...";
+            // 
+            // DeviceCountLabel
+            // 
+            this.DeviceCountLabel.Name = "DeviceCountLabel";
+            this.DeviceCountLabel.Size = new System.Drawing.Size(715, 17);
+            this.DeviceCountLabel.Spring = true;
+            this.DeviceCountLabel.Text = "No devices";
+            this.DeviceCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // DeviceListView
+            // 
+            this.DeviceListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.DeviceName,
+            this.DeviceMAC,
+            this.DeviceIP,
+            this.DeviceModel,
+            this.DeviceFirmware});
+            this.DeviceListView.FullRowSelect = true;
+            this.DeviceListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.DeviceListView.HideSelection = false;
+            this.DeviceListView.Location = new System.Drawing.Point(13, 34);
+            this.DeviceListView.MultiSelect = false;
+            this.DeviceListView.Name = "DeviceListView";
+            this.DeviceListView.Size = new System.Drawing.Size(775, 169);
+            this.DeviceListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.DeviceListView.TabIndex = 4;
+            this.DeviceListView.UseCompatibleStateImageBehavior = false;
+            this.DeviceListView.UseWaitCursor = true;
+            this.DeviceListView.View = System.Windows.Forms.View.Details;
+            this.DeviceListView.SelectedIndexChanged += new System.EventHandler(this.DeviceListView_SelectedIndexChanged);
+            // 
+            // DeviceName
+            // 
+            this.DeviceName.Text = "Device Name";
+            this.DeviceName.Width = 200;
+            // 
+            // DeviceMAC
+            // 
+            this.DeviceMAC.Text = "MAC";
+            this.DeviceMAC.Width = 100;
+            // 
+            // DeviceIP
+            // 
+            this.DeviceIP.Text = "IP Address";
+            this.DeviceIP.Width = 120;
+            // 
+            // DeviceModel
+            // 
+            this.DeviceModel.Text = "Model";
+            this.DeviceModel.Width = 100;
+            // 
+            // DeviceFirmware
+            // 
+            this.DeviceFirmware.Text = "Firmware";
+            this.DeviceFirmware.Width = 250;
+            // 
+            // OTABrowser
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.DeviceListView);
+            this.Controls.Add(this.StatusStrip);
+            this.Controls.Add(this.BrowserLabel);
+            this.Name = "OTABrowser";
+            this.Text = "Shelly OTA Browser";
+            this.UseWaitCursor = true;
+            this.Load += new System.EventHandler(this.OTABrowser_Load);
+            this.StatusStrip.ResumeLayout(false);
+            this.StatusStrip.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+        private System.Windows.Forms.Label BrowserLabel;
+        private System.Windows.Forms.StatusStrip StatusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
+        private System.Windows.Forms.ToolStripStatusLabel DeviceCountLabel;
+        private System.Windows.Forms.ListView DeviceListView;
+        private System.Windows.Forms.ColumnHeader DeviceName;
+        private System.Windows.Forms.ColumnHeader DeviceMAC;
+        private System.Windows.Forms.ColumnHeader DeviceIP;
+        private System.Windows.Forms.ColumnHeader DeviceModel;
+        private System.Windows.Forms.ColumnHeader DeviceFirmware;
+    }
+}
+
