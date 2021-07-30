@@ -5,24 +5,6 @@ using System.Net.Http;
 
 using Newtonsoft.Json.Linq;
 
-// https://stackoverflow.com/questions/16339167/how-do-i-deserialize-a-complex-json-object-in-c-sharp-net
-
-
-/*
- {
-  "isok": true,
-  "data": {
-    "SHPLG-1": {
-      "url": "http://shelly-api-eu.shelly.cloud/firmware/SHPLG-1.zip",
-      "version": "20210115-103101/v1.9.4@e2732e05"
-    },
-    "SHPLG-S": {
-      "url": "http://shelly-api-eu.shelly.cloud/firmware/SHPLG-S.zip",
-      "version": "20210724-210557/v1.11.0-1PMfix-gdf51fe2"
-    },
-    ...
- */
-
 namespace Shelly_OTA_Win
 {
     class ShellyFirmwareAPI
@@ -43,10 +25,10 @@ namespace Shelly_OTA_Win
                 throw new InvalidOperationException();
             }
 
-            foreach (var (key, value) in data["data"].ToObject<Dictionary<string, ShellyFirmwareVersion>>())
+            foreach (var (model, device) in data["data"].ToObject<Dictionary<string, ShellyFirmwareVersion>>())
             {
-                value.deviceModel = key;
-                fwdata.Add(value);
+                device.deviceModel = model;
+                fwdata.Add(device);
             }
         }
 
@@ -60,7 +42,6 @@ namespace Shelly_OTA_Win
             return fwdata.Find(x => x.deviceModel == device.type);
         }
     }
-
 
     class ShellyFirmwareVersion
     {
