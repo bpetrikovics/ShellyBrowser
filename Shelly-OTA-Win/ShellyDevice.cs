@@ -48,7 +48,12 @@ namespace Shelly_OTA_Win
 
         public void UpdateLastSeen()
         {
-            this.lastseen = (DateTimeOffset)DateTime.UtcNow;
+            this.lastseen = (DateTimeOffset)DateTime.Now;
+        }
+
+        public int Age()
+        {
+            return (int)(DateTime.Now - this.lastseen).TotalSeconds;
         }
 
         public bool Equals(ShellyDevice other)
