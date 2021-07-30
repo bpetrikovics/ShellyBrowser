@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -47,6 +48,11 @@ namespace Shelly_OTA_Win
                     Item.SubItems.Add(device.address);
                     Item.SubItems.Add(device.type);
                     Item.SubItems.Add(device.fw);
+                    if (device.fw != ShellyFirmwareAPI.getLatestVersionForModel(device.type))
+                    {
+                        Item.UseItemStyleForSubItems = false;
+                        Item.SubItems[4].ForeColor = Color.Red;
+                    }
                     DeviceListView.Items.Add(Item);
                 }
                 DeviceListView.EndUpdate();
