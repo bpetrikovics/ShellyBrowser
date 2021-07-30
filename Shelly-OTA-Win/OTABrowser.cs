@@ -18,7 +18,7 @@ namespace Shelly_OTA_Win
         private delegate void SafeRefreshListViewDelegate(List<ShellyDevice> devices);
 
         public static MulticastService mdns = new MulticastService();
-        public static ServiceDiscovery sd = new ServiceDiscovery(mdns);
+        public static ServiceDiscovery sd = new(mdns);
 
         private List<ShellyDevice> Devices = new();
 
@@ -114,7 +114,7 @@ namespace Shelly_OTA_Win
             {
                 var selected = DeviceListView.SelectedItems[0];
                 var idx = Devices.FindIndex(x => x.mac == selected.SubItems[1].Text);
-                StatusLabel.Text = $"Selected {selected.SubItems[2].Text} with index {idx}";
+                StatusLabel.Text = $"Device {selected.SubItems[2].Text} last seen {Devices[idx].Age()} seconds ago";
             }
             else
             {
