@@ -93,6 +93,7 @@ namespace Shelly_OTA_Win
             this.DeviceListView.Location = new System.Drawing.Point(13, 34);
             this.DeviceListView.MultiSelect = false;
             this.DeviceListView.Name = "DeviceListView";
+            this.DeviceListView.ShowItemToolTips = true;
             this.DeviceListView.Size = new System.Drawing.Size(775, 169);
             this.DeviceListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.DeviceListView.TabIndex = 4;
