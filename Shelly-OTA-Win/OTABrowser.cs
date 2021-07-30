@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -119,13 +120,60 @@ namespace Shelly_OTA_Win
         {
             if (DeviceListView.SelectedIndices.Count != 0)
             {
-                var selected = DeviceListView.SelectedItems[0];
-                var idx = Devices.FindIndex(x => x.mac == selected.SubItems[1].Text);
-                StatusLabel.Text = $"Device {selected.SubItems[2].Text} last seen {Devices[idx].Age()} seconds ago";
+                var device = Devices.Find(x => x.mac == DeviceListView.SelectedItems[0].SubItems[1].Text);
+                StatusLabel.Text = $"Device {device.address} last seen {device.Age()} seconds ago";
+                DetailPanel.Enabled = true;
             }
             else
             {
                 StatusLabel.Text = "Selection cleared";
+                DetailPanel.Enabled = false;
+            }
+        }
+
+        private void VisitDeviceLink(ShellyDevice device, string path = "")
+        {
+            ProcessStartInfo psi = new()
+            {
+                FileName = $"http://{device.address}{path}",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+
+        private void WebUILinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                VisitDeviceLink(Devices.Find(x => x.mac == DeviceListView.SelectedItems[0].SubItems[1].Text));
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show($"Unable to open link that was clicked: {exc}");
+            }
+        }
+
+        private void DeviceInfoLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                VisitDeviceLink(Devices.Find(x => x.mac == DeviceListView.SelectedItems[0].SubItems[1].Text), "/shelly");
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show($"Unable to open link that was clicked: {exc}");
+            }
+        }
+
+        private void StatusLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                VisitDeviceLink(Devices.Find(x => x.mac == DeviceListView.SelectedItems[0].SubItems[1].Text), "/status");
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show($"Unable to open link that was clicked: {exc}");
             }
         }
     }

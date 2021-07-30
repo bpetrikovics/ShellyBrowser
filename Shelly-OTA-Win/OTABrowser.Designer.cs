@@ -39,7 +39,14 @@ namespace Shelly_OTA_Win
             this.DeviceIP = new System.Windows.Forms.ColumnHeader();
             this.DeviceModel = new System.Windows.Forms.ColumnHeader();
             this.DeviceFirmware = new System.Windows.Forms.ColumnHeader();
+            this.DetailPanel = new System.Windows.Forms.Panel();
+            this.UrlBox = new System.Windows.Forms.GroupBox();
+            this.StatusLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.DeviceInfoLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.WebUILinkLabel = new System.Windows.Forms.LinkLabel();
             this.StatusStrip.SuspendLayout();
+            this.DetailPanel.SuspendLayout();
+            this.UrlBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // BrowserLabel
@@ -127,11 +134,71 @@ namespace Shelly_OTA_Win
             this.DeviceFirmware.Text = "Firmware";
             this.DeviceFirmware.Width = 250;
             // 
+            // DetailPanel
+            // 
+            this.DetailPanel.Controls.Add(this.UrlBox);
+            this.DetailPanel.Enabled = false;
+            this.DetailPanel.Location = new System.Drawing.Point(13, 218);
+            this.DetailPanel.Name = "DetailPanel";
+            this.DetailPanel.Size = new System.Drawing.Size(775, 207);
+            this.DetailPanel.TabIndex = 5;
+            this.DetailPanel.UseWaitCursor = true;
+            // 
+            // UrlBox
+            // 
+            this.UrlBox.Controls.Add(this.StatusLinkLabel);
+            this.UrlBox.Controls.Add(this.DeviceInfoLinkLabel);
+            this.UrlBox.Controls.Add(this.WebUILinkLabel);
+            this.UrlBox.Location = new System.Drawing.Point(572, 3);
+            this.UrlBox.Name = "UrlBox";
+            this.UrlBox.Size = new System.Drawing.Size(200, 63);
+            this.UrlBox.TabIndex = 0;
+            this.UrlBox.TabStop = false;
+            this.UrlBox.Text = "Device URLs";
+            this.UrlBox.UseWaitCursor = true;
+            // 
+            // StatusLinkLabel
+            // 
+            this.StatusLinkLabel.AutoSize = true;
+            this.StatusLinkLabel.Location = new System.Drawing.Point(132, 23);
+            this.StatusLinkLabel.Name = "StatusLinkLabel";
+            this.StatusLinkLabel.Size = new System.Drawing.Size(39, 15);
+            this.StatusLinkLabel.TabIndex = 2;
+            this.StatusLinkLabel.TabStop = true;
+            this.StatusLinkLabel.Text = "Status";
+            this.StatusLinkLabel.UseWaitCursor = true;
+            this.StatusLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.StatusLinkLabel_LinkClicked);
+            // 
+            // DeviceInfoLinkLabel
+            // 
+            this.DeviceInfoLinkLabel.AutoSize = true;
+            this.DeviceInfoLinkLabel.Location = new System.Drawing.Point(59, 23);
+            this.DeviceInfoLinkLabel.Name = "DeviceInfoLinkLabel";
+            this.DeviceInfoLinkLabel.Size = new System.Drawing.Size(66, 15);
+            this.DeviceInfoLinkLabel.TabIndex = 1;
+            this.DeviceInfoLinkLabel.TabStop = true;
+            this.DeviceInfoLinkLabel.Text = "Device Info";
+            this.DeviceInfoLinkLabel.UseWaitCursor = true;
+            this.DeviceInfoLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DeviceInfoLinkLabel_LinkClicked);
+            // 
+            // WebUILinkLabel
+            // 
+            this.WebUILinkLabel.AutoSize = true;
+            this.WebUILinkLabel.Location = new System.Drawing.Point(7, 23);
+            this.WebUILinkLabel.Name = "WebUILinkLabel";
+            this.WebUILinkLabel.Size = new System.Drawing.Size(45, 15);
+            this.WebUILinkLabel.TabIndex = 0;
+            this.WebUILinkLabel.TabStop = true;
+            this.WebUILinkLabel.Text = "Web UI";
+            this.WebUILinkLabel.UseWaitCursor = true;
+            this.WebUILinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebUILinkLabel_LinkClicked);
+            // 
             // OTABrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.DetailPanel);
             this.Controls.Add(this.DeviceListView);
             this.Controls.Add(this.StatusStrip);
             this.Controls.Add(this.BrowserLabel);
@@ -141,6 +208,9 @@ namespace Shelly_OTA_Win
             this.Load += new System.EventHandler(this.OTABrowser_Load);
             this.StatusStrip.ResumeLayout(false);
             this.StatusStrip.PerformLayout();
+            this.DetailPanel.ResumeLayout(false);
+            this.UrlBox.ResumeLayout(false);
+            this.UrlBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,6 +227,11 @@ namespace Shelly_OTA_Win
         private System.Windows.Forms.ColumnHeader DeviceIP;
         private System.Windows.Forms.ColumnHeader DeviceModel;
         private System.Windows.Forms.ColumnHeader DeviceFirmware;
+        private System.Windows.Forms.Panel DetailPanel;
+        private System.Windows.Forms.GroupBox UrlBox;
+        private System.Windows.Forms.LinkLabel WebUILinkLabel;
+        private System.Windows.Forms.LinkLabel DeviceInfoLinkLabel;
+        private System.Windows.Forms.LinkLabel StatusLinkLabel;
     }
 }
 
