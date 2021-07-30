@@ -114,7 +114,7 @@ namespace Shelly_OTA_Win
             {
                 var selected = DeviceListView.SelectedItems[0];
                 var idx = Devices.FindIndex(x => x.mac == selected.SubItems[1].Text);
-                StatusLabel.Text = $"Device {selected.SubItems[2].Text} last seen {Devices[idx].Age()} seconds ago";
+                StatusLabel.Text = $"Device {selected.SubItems[2].Text} last seen {Devices[idx].Age()} seconds ago, latest is {ShellyFirmwareAPI.getLatestVersionForModel(Devices[idx].type)}";
             }
             else
             {
