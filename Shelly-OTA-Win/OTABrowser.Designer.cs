@@ -144,8 +144,9 @@ namespace Shelly_OTA_Win
             this.BrowserImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.BrowserImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("BrowserImageList.ImageStream")));
             this.BrowserImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.BrowserImageList.Images.SetKeyName(0, "lock-open.png");
+            this.BrowserImageList.Images.SetKeyName(0, "lock-open-variant-outline.png");
             this.BrowserImageList.Images.SetKeyName(1, "lock-alert.png");
+            this.BrowserImageList.Images.SetKeyName(2, "lock-open.png");
             // 
             // DetailPanel
             // 
