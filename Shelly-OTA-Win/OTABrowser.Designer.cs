@@ -117,7 +117,7 @@ namespace Shelly_OTA_Win
             // DeviceName
             // 
             this.DeviceName.Text = "Device Name";
-            this.DeviceName.Width = 200;
+            this.DeviceName.Width = 210;
             // 
             // DeviceMAC
             // 
@@ -137,7 +137,7 @@ namespace Shelly_OTA_Win
             // DeviceFirmware
             // 
             this.DeviceFirmware.Text = "Firmware";
-            this.DeviceFirmware.Width = 250;
+            this.DeviceFirmware.Width = 240;
             // 
             // BrowserImageList
             // 
