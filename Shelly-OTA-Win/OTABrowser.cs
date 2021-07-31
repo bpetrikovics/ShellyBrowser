@@ -15,6 +15,9 @@ namespace Shelly_OTA_Win
 
         public static MulticastService mdns = new();
         public static ServiceDiscovery sd = new(mdns);
+
+        // This needs to be a class variable otherwise if just defined as a local variable, the garbage collector
+        // will collect it due to lack of reference
         public static System.Threading.Timer AgeCheckTimer;
 
         internal static List<ShellyDevice> Devices = new();
@@ -32,6 +35,7 @@ namespace Shelly_OTA_Win
         {
             StatusLabel.Text = "Checking latest firmware versions";
             ShellyFirmwareAPI.Init();
+            DeviceInventory.Init();
 
             AgeCheckTimer = new System.Threading.Timer(new System.Threading.TimerCallback(DeviceAgeCheck), null, 1250, 500);
 
@@ -54,7 +58,7 @@ namespace Shelly_OTA_Win
         {
             var state_changed = false;
 
-            foreach (var device in Devices)
+            foreach (var device in DeviceInventory.All())
             {
                 if ((device.Age() >= maxDeviceAge) && (device.stale is false))
                 {
@@ -72,7 +76,7 @@ namespace Shelly_OTA_Win
 
             if(state_changed)
             {
-                RefreshListView(Devices);
+                RefreshListView(DeviceInventory.All());
             }
         }
 
@@ -91,6 +95,7 @@ namespace Shelly_OTA_Win
                 {
                     var Item = new ListViewItem(device.name);
                     Item.ImageIndex = device.auth is true ? 1 : 0;
+
                     Item.SubItems.Add(device.mac);
                     Item.SubItems.Add(device.address);
                     Item.SubItems.Add(device.type);
@@ -106,7 +111,7 @@ namespace Shelly_OTA_Win
                     {
                         Item.UseItemStyleForSubItems = false;
                         Item.SubItems[4].ForeColor = Color.Red;
-                        Item.ToolTipText = $"New version available: {ShellyFirmwareAPI.getLatestVersionForModel(device.type)}";
+                        Item.ToolTipText = $"New firmware available: {ShellyFirmwareAPI.getLatestVersionForModel(device.type)}";
                     }
 
                     DeviceListView.Items.Add(Item);
@@ -125,7 +130,7 @@ namespace Shelly_OTA_Win
             {
                 if (address.Name.ToString().StartsWith("shelly"))
                 {
-                    ShellyDevice mydev = Devices.Find(x => x.name == address.Name.ToString());
+                    ShellyDevice mydev = DeviceInventory.FindByName(address.Name.ToString());
                     if (mydev is not null)
                     {
                         StatusLabel.Text = $"Received update for device: {mydev.name}";
@@ -136,15 +141,15 @@ namespace Shelly_OTA_Win
                         StatusLabel.Text = $"Discovering device: {address.Name} at {address.Address}";
                         mydev = await ShellyDevice.Discover(address);
                         StatusLabel.Text = $"Discovered new {mydev.type} device at {mydev.address}";
-                        Devices.Add(mydev);
-                        RefreshListView(Devices);
+                        DeviceInventory.AddDevice(mydev);
+                        RefreshListView(DeviceInventory.All());
 
                         if (Devices.Count == 1)
                         {
                             UseWaitCursor = false;
                         }
 
-                        DeviceCountLabel.Text = $"{Devices.Count} device" + (Devices.Count > 1 ? "s" : "");
+                        DeviceCountLabel.Text = $"{DeviceInventory.Count()} device" + (DeviceInventory.Count() > 1 ? "s" : "");
                     }
                 }
             }
@@ -154,7 +159,7 @@ namespace Shelly_OTA_Win
         {
             if (DeviceListView.SelectedIndices.Count != 0)
             {
-                var device = Devices.Find(x => x.mac == DeviceListView.SelectedItems[0].SubItems[1].Text);
+                var device = DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
                 StatusLabel.Text = $"Device {device.address} last seen {device.Age()} seconds ago, stale: {device.stale}";
                 DetailPanel.Enabled = true;
             }
@@ -168,6 +173,13 @@ namespace Shelly_OTA_Win
         // simply Process.Start() an URI does not work anymore due to breaking API changes
         private void VisitDeviceLink(ShellyDevice device, string path = "")
         {
+            if (device is null)
+            {
+                // Should not happen, but handle error here anyway
+                MessageBox.Show("VisitDeviceLink() called with null device. This should not happen.");
+                return;
+            }
+
             ProcessStartInfo psi = new()
             {
                 FileName = $"http://{device.address}{path}",
@@ -180,7 +192,7 @@ namespace Shelly_OTA_Win
         {
             try
             {
-                VisitDeviceLink(Devices.Find(x => x.mac == DeviceListView.SelectedItems[0].SubItems[1].Text));
+                VisitDeviceLink(DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text));
             }
             catch (Exception exc)
             {
@@ -192,7 +204,7 @@ namespace Shelly_OTA_Win
         {
             try
             {
-                VisitDeviceLink(Devices.Find(x => x.mac == DeviceListView.SelectedItems[0].SubItems[1].Text), "/shelly");
+                VisitDeviceLink(DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/shelly");
             }
             catch (Exception exc)
             {
@@ -204,7 +216,7 @@ namespace Shelly_OTA_Win
         {
             try
             {
-                VisitDeviceLink(Devices.Find(x => x.mac == DeviceListView.SelectedItems[0].SubItems[1].Text), "/status");
+                VisitDeviceLink(DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/status");
             }
             catch (Exception exc)
             {
