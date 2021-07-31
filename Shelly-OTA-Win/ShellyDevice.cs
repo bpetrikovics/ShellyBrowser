@@ -14,7 +14,7 @@ namespace Shelly_OTA_Win
         // fields that are filled via JSON data from Shelly's status REST api
         public string type { get; set; }
         public string mac { get; set; }
-        public string auth { get; set; }
+        public bool auth { get; set; }
         public string fw { get; set; }
 
         // fields used and controlled internally
@@ -26,7 +26,7 @@ namespace Shelly_OTA_Win
         private static readonly HttpClient client = new HttpClient();
 
         [JsonConstructor]
-        public ShellyDevice(string type, string mac, string auth, string fw)
+        public ShellyDevice(string type, string mac, bool auth, string fw)
         {
             this.type = type;
             this.mac = mac;
