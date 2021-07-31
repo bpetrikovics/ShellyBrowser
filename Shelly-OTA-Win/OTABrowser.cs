@@ -7,27 +7,73 @@ using System.Windows.Forms;
 
 using Makaretu.Dns;
 
-/*
- * TODO:
- *   - Remove stale devices (regular ping or just simply based on timer, if timestamp is too old?)
- * 
- * */
-
 namespace Shelly_OTA_Win
 {
     public partial class OTABrowser : Form
     {
         private delegate void SafeRefreshListViewDelegate(List<ShellyDevice> devices);
 
-        public static MulticastService mdns = new MulticastService();
+        public static MulticastService mdns = new();
         public static ServiceDiscovery sd = new(mdns);
+        public static System.Threading.Timer AgeCheckTimer;
 
-        private List<ShellyDevice> Devices = new();
+        internal static List<ShellyDevice> Devices = new();
+
+        // to be moved to app.config property later
+        public static readonly int maxDeviceAge = 30;
 
         public OTABrowser()
         {
             FormClosing += new FormClosingEventHandler(OTABrowser_Closing);
             InitializeComponent();
+        }
+
+        private void OTABrowser_Load(object sender, EventArgs e)
+        {
+            StatusLabel.Text = "Checking latest firmware versions";
+            ShellyFirmwareAPI.Init();
+
+            AgeCheckTimer = new System.Threading.Timer(new System.Threading.TimerCallback(DeviceAgeCheck), null, 1250, 500);
+
+            StatusLabel.Text = "Please wait, devices will appear in the list once detected...";
+            mdns.AnswerReceived += MdnsAnswerReceived;
+            mdns.Start();
+            mdns.SendQuery("_http._tcp.local");
+        }
+
+        // This doesn't seem to properly work, likely because of threads e.g.
+        // Exception thrown: 'System.ObjectDisposedException' in System.Net.Sockets.dll
+        // Exception thrown: 'System.ObjectDisposedException' in System.Private.CoreLib.dll
+        private void OTABrowser_Closing(object sender, EventArgs e)
+        {
+            sd.Dispose();
+            mdns.Stop();
+        }
+
+        private void DeviceAgeCheck(object state)
+        {
+            var state_changed = false;
+
+            foreach (var device in Devices)
+            {
+                if ((device.Age() >= maxDeviceAge) && (device.stale is false))
+                {
+                    // Transition available -> stale
+                    device.stale = true;
+                    state_changed = true;
+                }
+                else if ((device.Age() < maxDeviceAge) && (device.stale is true))
+                {
+                    StatusLabel.Text = $"Device {device.name} no longer stale";
+                    device.stale = false;
+                    state_changed = true;
+                }
+            }
+
+            if(state_changed)
+            {
+                RefreshListView(Devices);
+            }
         }
 
         private void RefreshListView(List<ShellyDevice> devices)
@@ -36,7 +82,6 @@ namespace Shelly_OTA_Win
             {
                 var d = new SafeRefreshListViewDelegate(RefreshListView);
                 DeviceListView.Invoke(d, new object[] { devices });
-
             }
             else
             {
@@ -49,7 +94,13 @@ namespace Shelly_OTA_Win
                     Item.SubItems.Add(device.address);
                     Item.SubItems.Add(device.type);
                     Item.SubItems.Add(device.fw);
-                    if (device.fw != ShellyFirmwareAPI.getLatestVersionForModel(device.type))
+                    if (device.stale)
+                    {
+                        Item.UseItemStyleForSubItems = true;
+                        Item.ForeColor = Color.DarkGray;
+                        Item.ToolTipText = $"This device has not sent an update recently, it might have gone offline";
+                    }
+                    else if (device.fw != ShellyFirmwareAPI.getLatestVersionForModel(device.type))
                     {
                         Item.UseItemStyleForSubItems = false;
                         Item.SubItems[4].ForeColor = Color.Red;
@@ -74,12 +125,12 @@ namespace Shelly_OTA_Win
                     ShellyDevice mydev = Devices.Find(x => x.name == address.Name.ToString());
                     if (mydev is not null)
                     {
-                        StatusLabel.Text = $"Device already known: {mydev.name}";
+                        StatusLabel.Text = $"Received update for device: {mydev.name}";
                         mydev.UpdateLastSeen();
                     }
                     else
                     {
-                        StatusLabel.Text = $"Discovering device: {address.Name.ToString()} at {address.Address.ToString()}";
+                        StatusLabel.Text = $"Discovering device: {address.Name} at {address.Address}";
                         mydev = await ShellyDevice.Discover(address);
                         StatusLabel.Text = $"Discovered new {mydev.type} device at {mydev.address}";
                         Devices.Add(mydev);
@@ -96,32 +147,12 @@ namespace Shelly_OTA_Win
             }
         }
 
-        private void OTABrowser_Load(object sender, EventArgs e)
-        {
-            StatusLabel.Text = "Checking latest firmware versions";
-            ShellyFirmwareAPI.Init();
-
-            StatusLabel.Text = "Waiting for mDNS announcements...";
-            mdns.AnswerReceived += MdnsAnswerReceived;
-            mdns.Start();
-            mdns.SendQuery("_http._tcp.local");
-        }
-
-        // This doesn't seem to properly work, likely because of threads e.g.
-        // Exception thrown: 'System.ObjectDisposedException' in System.Net.Sockets.dll
-        // Exception thrown: 'System.ObjectDisposedException' in System.Private.CoreLib.dll
-         private void OTABrowser_Closing(object sender, EventArgs e)
-         {
-            sd.Dispose();
-            mdns.Stop();
-         }
-
         private void DeviceListView_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (DeviceListView.SelectedIndices.Count != 0)
             {
                 var device = Devices.Find(x => x.mac == DeviceListView.SelectedItems[0].SubItems[1].Text);
-                StatusLabel.Text = $"Device {device.address} last seen {device.Age()} seconds ago";
+                StatusLabel.Text = $"Device {device.address} last seen {device.Age()} seconds ago, stale: {device.stale}";
                 DetailPanel.Enabled = true;
             }
             else
@@ -131,6 +162,7 @@ namespace Shelly_OTA_Win
             }
         }
 
+        // simply Process.Start() an URI does not work anymore due to breaking API changes
         private void VisitDeviceLink(ShellyDevice device, string path = "")
         {
             ProcessStartInfo psi = new()

@@ -160,7 +160,7 @@ namespace Shelly_OTA_Win
             // StatusLinkLabel
             // 
             this.StatusLinkLabel.AutoSize = true;
-            this.StatusLinkLabel.Location = new System.Drawing.Point(132, 23);
+            this.StatusLinkLabel.Location = new System.Drawing.Point(142, 23);
             this.StatusLinkLabel.Name = "StatusLinkLabel";
             this.StatusLinkLabel.Size = new System.Drawing.Size(39, 15);
             this.StatusLinkLabel.TabIndex = 2;
@@ -172,7 +172,7 @@ namespace Shelly_OTA_Win
             // DeviceInfoLinkLabel
             // 
             this.DeviceInfoLinkLabel.AutoSize = true;
-            this.DeviceInfoLinkLabel.Location = new System.Drawing.Point(59, 23);
+            this.DeviceInfoLinkLabel.Location = new System.Drawing.Point(70, 23);
             this.DeviceInfoLinkLabel.Name = "DeviceInfoLinkLabel";
             this.DeviceInfoLinkLabel.Size = new System.Drawing.Size(66, 15);
             this.DeviceInfoLinkLabel.TabIndex = 1;
@@ -184,7 +184,7 @@ namespace Shelly_OTA_Win
             // WebUILinkLabel
             // 
             this.WebUILinkLabel.AutoSize = true;
-            this.WebUILinkLabel.Location = new System.Drawing.Point(7, 23);
+            this.WebUILinkLabel.Location = new System.Drawing.Point(19, 23);
             this.WebUILinkLabel.Name = "WebUILinkLabel";
             this.WebUILinkLabel.Size = new System.Drawing.Size(45, 15);
             this.WebUILinkLabel.TabIndex = 0;
