@@ -90,10 +90,12 @@ namespace Shelly_OTA_Win
                 foreach (var device in devices)
                 {
                     var Item = new ListViewItem(device.name);
+                    Item.ImageIndex = device.auth is true ? 1 : 0;
                     Item.SubItems.Add(device.mac);
                     Item.SubItems.Add(device.address);
                     Item.SubItems.Add(device.type);
                     Item.SubItems.Add(device.fw);
+
                     if (device.stale)
                     {
                         Item.UseItemStyleForSubItems = true;
@@ -106,6 +108,7 @@ namespace Shelly_OTA_Win
                         Item.SubItems[4].ForeColor = Color.Red;
                         Item.ToolTipText = $"New version available: {ShellyFirmwareAPI.getLatestVersionForModel(device.type)}";
                     }
+
                     DeviceListView.Items.Add(Item);
                 }
                 DeviceListView.EndUpdate();
