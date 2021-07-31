@@ -21,6 +21,7 @@ namespace Shelly_OTA_Win
         public string address { get; set; }
         public string name { get; set; }
         public DateTimeOffset lastseen { get; set; }
+        public bool stale { get; set; }
 
         private static readonly HttpClient client = new HttpClient();
 
@@ -41,6 +42,7 @@ namespace Shelly_OTA_Win
 
             dev.address = address.Address.ToString();
             dev.name = address.Name.ToString();
+            dev.stale = false;
             dev.UpdateLastSeen();
 
             return dev;
