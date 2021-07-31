@@ -29,6 +29,8 @@ namespace Shelly_OTA_Win
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OTABrowser));
             this.BrowserLabel = new System.Windows.Forms.Label();
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -39,7 +41,9 @@ namespace Shelly_OTA_Win
             this.DeviceIP = new System.Windows.Forms.ColumnHeader();
             this.DeviceModel = new System.Windows.Forms.ColumnHeader();
             this.DeviceFirmware = new System.Windows.Forms.ColumnHeader();
+            this.BrowserImageList = new System.Windows.Forms.ImageList(this.components);
             this.DetailPanel = new System.Windows.Forms.Panel();
+            this.DetailBox = new System.Windows.Forms.GroupBox();
             this.UrlBox = new System.Windows.Forms.GroupBox();
             this.StatusLinkLabel = new System.Windows.Forms.LinkLabel();
             this.DeviceInfoLinkLabel = new System.Windows.Forms.LinkLabel();
@@ -102,6 +106,7 @@ namespace Shelly_OTA_Win
             this.DeviceListView.Name = "DeviceListView";
             this.DeviceListView.ShowItemToolTips = true;
             this.DeviceListView.Size = new System.Drawing.Size(775, 169);
+            this.DeviceListView.SmallImageList = this.BrowserImageList;
             this.DeviceListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.DeviceListView.TabIndex = 4;
             this.DeviceListView.UseCompatibleStateImageBehavior = false;
@@ -134,8 +139,17 @@ namespace Shelly_OTA_Win
             this.DeviceFirmware.Text = "Firmware";
             this.DeviceFirmware.Width = 250;
             // 
+            // BrowserImageList
+            // 
+            this.BrowserImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.BrowserImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("BrowserImageList.ImageStream")));
+            this.BrowserImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.BrowserImageList.Images.SetKeyName(0, "lock-open.png");
+            this.BrowserImageList.Images.SetKeyName(1, "lock-alert.png");
+            // 
             // DetailPanel
             // 
+            this.DetailPanel.Controls.Add(this.DetailBox);
             this.DetailPanel.Controls.Add(this.UrlBox);
             this.DetailPanel.Enabled = false;
             this.DetailPanel.Location = new System.Drawing.Point(13, 218);
@@ -143,6 +157,16 @@ namespace Shelly_OTA_Win
             this.DetailPanel.Size = new System.Drawing.Size(775, 207);
             this.DetailPanel.TabIndex = 5;
             this.DetailPanel.UseWaitCursor = true;
+            // 
+            // DetailBox
+            // 
+            this.DetailBox.Location = new System.Drawing.Point(4, 3);
+            this.DetailBox.Name = "DetailBox";
+            this.DetailBox.Size = new System.Drawing.Size(550, 201);
+            this.DetailBox.TabIndex = 1;
+            this.DetailBox.TabStop = false;
+            this.DetailBox.Text = "Shelly Device";
+            this.DetailBox.UseWaitCursor = true;
             // 
             // UrlBox
             // 
@@ -232,6 +256,8 @@ namespace Shelly_OTA_Win
         private System.Windows.Forms.LinkLabel WebUILinkLabel;
         private System.Windows.Forms.LinkLabel DeviceInfoLinkLabel;
         private System.Windows.Forms.LinkLabel StatusLinkLabel;
+        private System.Windows.Forms.GroupBox DetailBox;
+        private System.Windows.Forms.ImageList BrowserImageList;
     }
 }
 
