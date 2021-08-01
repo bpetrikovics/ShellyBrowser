@@ -16,6 +16,7 @@ namespace Shelly_OTA_Win
         public string mac { get; set; }
         public bool auth { get; set; }
         public string fw { get; set; }
+        public bool sleep_mode { get; set; }
 
         // fields used and controlled internally
         public string address { get; set; }
@@ -26,12 +27,13 @@ namespace Shelly_OTA_Win
         private static readonly HttpClient client = new HttpClient();
 
         [JsonConstructor]
-        public ShellyDevice(string type, string mac, bool auth, string fw)
+        public ShellyDevice(string type, string mac, bool auth, string fw, bool sleep_mode=false)
         {
             this.type = type;
             this.mac = mac;
             this.auth = auth;
             this.fw = fw;
+            this.sleep_mode = sleep_mode;
         }
 
         public static async Task<ShellyDevice> Discover(AddressRecord address)
