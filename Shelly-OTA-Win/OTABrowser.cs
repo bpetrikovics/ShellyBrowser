@@ -128,7 +128,7 @@ namespace Shelly_OTA_Win
         {
             if (StatusStrip.InvokeRequired)
             {
-                StatusStrip.Invoke(new Action(() => StatusStrip.Items.Find("StatusLabel", false).First().Text = text + " (invoked)"));
+                StatusStrip.Invoke(new Action(() => StatusStrip.Items.Find("StatusLabel", false).First().Text = text));
             }
             else
             {
@@ -161,11 +161,6 @@ namespace Shelly_OTA_Win
                         SafeStatusUpdate($"Discovered new {mydev.type} device at {mydev.address}");
                         DeviceInventory.AddDevice(mydev);
                         RefreshListView(DeviceInventory.All());
-
-                        if (Devices.Count == 1)
-                        {
-                            UseWaitCursor = false;
-                        }
 
                         // Thread-safe update of the device count label on the status strip
                         StatusStrip.Invoke(new Action(() => StatusStrip.Items.Find("DeviceCountLabel", false).First().Text = $"{DeviceInventory.Count()} device" + (DeviceInventory.Count() > 1 ? "s" : "")));
