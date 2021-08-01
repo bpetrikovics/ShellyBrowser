@@ -18,6 +18,8 @@ namespace Shelly_OTA_Win
         public static MulticastService mdns = new();
         public static ServiceDiscovery sd = new(mdns);
 
+        private static StatusService status;
+
         // This needs to be a class variable otherwise if just defined as a local variable, the garbage collector
         // will collect it due to lack of reference
         public static System.Threading.Timer AgeCheckTimer;
@@ -35,13 +37,14 @@ namespace Shelly_OTA_Win
 
         private void OTABrowser_Load(object sender, EventArgs e)
         {
-            SafeStatusUpdate("Checking latest firmware versions");
+            status = new StatusService(StatusStrip);
+            status.Update("Checking latest firmware versions");
             ShellyFirmwareAPI.Init();
             DeviceInventory.Init();
 
             AgeCheckTimer = new System.Threading.Timer(new System.Threading.TimerCallback(DeviceAgeCheck), null, 1250, 500);
 
-            SafeStatusUpdate("Please wait, devices will appear in the list once detected...");
+            status.Update("Please wait, devices will appear in the list once detected...");
             mdns.AnswerReceived += MdnsAnswerReceived;
             mdns.Start();
             mdns.SendQuery("_http._tcp.local");
@@ -70,7 +73,7 @@ namespace Shelly_OTA_Win
                 }
                 else if ((device.Age() < maxDeviceAge) && (device.stale is true))
                 {
-                    SafeStatusUpdate($"Device {device.name} no longer stale");
+                    status.Update($"Device {device.name} no longer stale");
                     device.stale = false;
                     state_changed = true;
                 }
@@ -122,20 +125,6 @@ namespace Shelly_OTA_Win
             }
         }
 
-        // The StatusLabel is not a Control so it does not have its InvokeRequired/Invoke methods; this needs to be done
-        // through its parent.
-        public void SafeStatusUpdate(string text)
-        {
-            if (StatusStrip.InvokeRequired)
-            {
-                StatusStrip.Invoke(new Action(() => StatusStrip.Items.Find("StatusLabel", false).First().Text = text));
-            }
-            else
-            {
-                StatusStrip.Items.Find("StatusLabel", false).First().Text = text;
-            }
-        }
-
         // As this is being called from the mdns service, it may be run in a thread which is separate
         // from the thread where the Form exists. Therefore the form controls need to be accessed in a
         // thread-safe way via delegate function
@@ -150,20 +139,20 @@ namespace Shelly_OTA_Win
                     ShellyDevice mydev = DeviceInventory.FindByName(address.Name.ToString());
                     if (mydev is not null)
                     {
-                        SafeStatusUpdate($"Received update for device: {mydev.name}");
+                        status.Update($"Received update for device: {mydev.name}");
                         mydev.UpdateLastSeen();
                     }
                     else
                     {
-                        SafeStatusUpdate($"Discovering device: {address.Name} at {address.Address}");
+                        status.Update($"Discovering device: {address.Name} at {address.Address}");
                         mydev = await ShellyDevice.Discover(address);
 
-                        SafeStatusUpdate($"Discovered new {mydev.type} device at {mydev.address}");
+                        status.Update($"Discovered new {mydev.type} device at {mydev.address}");
                         DeviceInventory.AddDevice(mydev);
                         RefreshListView(DeviceInventory.All());
 
                         // Thread-safe update of the device count label on the status strip
-                        StatusStrip.Invoke(new Action(() => StatusStrip.Items.Find("DeviceCountLabel", false).First().Text = $"{DeviceInventory.Count()} device" + (DeviceInventory.Count() > 1 ? "s" : "")));
+                        status.UpdateDeviceCount(DeviceInventory.Count());
                     }
                 }
             }
@@ -174,12 +163,12 @@ namespace Shelly_OTA_Win
             if (DeviceListView.SelectedIndices.Count != 0)
             {
                 var device = DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
-                SafeStatusUpdate($"Device {device.address} last seen {device.Age()} seconds ago, stale: {device.stale}");
+                status.Update($"Device {device.address} last seen {device.Age()} seconds ago");
                 DetailPanel.Enabled = true;
             }
             else
             {
-                SafeStatusUpdate("Selection cleared");
+                status.Update("Selection cleared");
                 DetailPanel.Enabled = false;
             }
         }
