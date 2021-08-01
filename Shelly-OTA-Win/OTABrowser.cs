@@ -167,8 +167,8 @@ namespace Shelly_OTA_Win
                             UseWaitCursor = false;
                         }
 
-                        // TODO: Make this thread-safe as well
-                        DeviceCountLabel.Text = $"{DeviceInventory.Count()} device" + (DeviceInventory.Count() > 1 ? "s" : "");
+                        // Thread-safe update of the device count label on the status strip
+                        StatusStrip.Invoke(new Action(() => StatusStrip.Items.Find("DeviceCountLabel", false).First().Text = $"{DeviceInventory.Count()} device" + (DeviceInventory.Count() > 1 ? "s" : "")));
                     }
                 }
             }
