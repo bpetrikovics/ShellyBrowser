@@ -92,6 +92,8 @@ namespace Shelly_OTA_Win
             // 
             // DeviceListView
             // 
+            this.DeviceListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.DeviceListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.DeviceName,
             this.DeviceMAC,
@@ -150,6 +152,7 @@ namespace Shelly_OTA_Win
             // 
             // DetailPanel
             // 
+            this.DetailPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DetailPanel.Controls.Add(this.DetailBox);
             this.DetailPanel.Controls.Add(this.UrlBox);
             this.DetailPanel.Enabled = false;
