@@ -61,7 +61,6 @@ namespace Shelly_OTA_Win
             this.BrowserLabel.Size = new System.Drawing.Size(165, 15);
             this.BrowserLabel.TabIndex = 2;
             this.BrowserLabel.Text = "Devices found on the network";
-            this.BrowserLabel.UseWaitCursor = true;
             // 
             // StatusStrip
             // 
@@ -74,7 +73,6 @@ namespace Shelly_OTA_Win
             this.StatusStrip.Size = new System.Drawing.Size(800, 22);
             this.StatusStrip.TabIndex = 3;
             this.StatusStrip.Text = "statusStrip1";
-            this.StatusStrip.UseWaitCursor = true;
             // 
             // StatusLabel
             // 
@@ -104,7 +102,7 @@ namespace Shelly_OTA_Win
             this.DeviceListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.DeviceListView.HideSelection = false;
             this.DeviceListView.Location = new System.Drawing.Point(13, 34);
-            this.DeviceListView.MinimumSize = new System.Drawing.Size(0, 180);
+            this.DeviceListView.MinimumSize = new System.Drawing.Size(4, 180);
             this.DeviceListView.MultiSelect = false;
             this.DeviceListView.Name = "DeviceListView";
             this.DeviceListView.ShowItemToolTips = true;
@@ -113,7 +111,6 @@ namespace Shelly_OTA_Win
             this.DeviceListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.DeviceListView.TabIndex = 4;
             this.DeviceListView.UseCompatibleStateImageBehavior = false;
-            this.DeviceListView.UseWaitCursor = true;
             this.DeviceListView.View = System.Windows.Forms.View.Details;
             this.DeviceListView.SelectedIndexChanged += new System.EventHandler(this.DeviceListView_SelectedIndexChanged);
             // 
@@ -161,7 +158,6 @@ namespace Shelly_OTA_Win
             this.DetailPanel.Name = "DetailPanel";
             this.DetailPanel.Size = new System.Drawing.Size(775, 207);
             this.DetailPanel.TabIndex = 5;
-            this.DetailPanel.UseWaitCursor = true;
             // 
             // DetailBox
             // 
@@ -171,7 +167,6 @@ namespace Shelly_OTA_Win
             this.DetailBox.TabIndex = 1;
             this.DetailBox.TabStop = false;
             this.DetailBox.Text = "Shelly Device";
-            this.DetailBox.UseWaitCursor = true;
             // 
             // UrlBox
             // 
@@ -184,7 +179,6 @@ namespace Shelly_OTA_Win
             this.UrlBox.TabIndex = 0;
             this.UrlBox.TabStop = false;
             this.UrlBox.Text = "Device URLs";
-            this.UrlBox.UseWaitCursor = true;
             // 
             // StatusLinkLabel
             // 
@@ -195,7 +189,6 @@ namespace Shelly_OTA_Win
             this.StatusLinkLabel.TabIndex = 2;
             this.StatusLinkLabel.TabStop = true;
             this.StatusLinkLabel.Text = "Status";
-            this.StatusLinkLabel.UseWaitCursor = true;
             this.StatusLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.StatusLinkLabel_LinkClicked);
             // 
             // DeviceInfoLinkLabel
@@ -207,7 +200,6 @@ namespace Shelly_OTA_Win
             this.DeviceInfoLinkLabel.TabIndex = 1;
             this.DeviceInfoLinkLabel.TabStop = true;
             this.DeviceInfoLinkLabel.Text = "Device Info";
-            this.DeviceInfoLinkLabel.UseWaitCursor = true;
             this.DeviceInfoLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DeviceInfoLinkLabel_LinkClicked);
             // 
             // WebUILinkLabel
@@ -219,7 +211,6 @@ namespace Shelly_OTA_Win
             this.WebUILinkLabel.TabIndex = 0;
             this.WebUILinkLabel.TabStop = true;
             this.WebUILinkLabel.Text = "Web UI";
-            this.WebUILinkLabel.UseWaitCursor = true;
             this.WebUILinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebUILinkLabel_LinkClicked);
             // 
             // OTABrowser
@@ -233,7 +224,6 @@ namespace Shelly_OTA_Win
             this.Controls.Add(this.BrowserLabel);
             this.Name = "OTABrowser";
             this.Text = "Shelly OTA Browser";
-            this.UseWaitCursor = true;
             this.Load += new System.EventHandler(this.OTABrowser_Load);
             this.StatusStrip.ResumeLayout(false);
             this.StatusStrip.PerformLayout();
