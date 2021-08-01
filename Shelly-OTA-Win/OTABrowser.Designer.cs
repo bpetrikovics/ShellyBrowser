@@ -92,6 +92,8 @@ namespace Shelly_OTA_Win
             // 
             // DeviceListView
             // 
+            this.DeviceListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.DeviceListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.DeviceName,
             this.DeviceMAC,
@@ -102,10 +104,11 @@ namespace Shelly_OTA_Win
             this.DeviceListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.DeviceListView.HideSelection = false;
             this.DeviceListView.Location = new System.Drawing.Point(13, 34);
+            this.DeviceListView.MinimumSize = new System.Drawing.Size(0, 180);
             this.DeviceListView.MultiSelect = false;
             this.DeviceListView.Name = "DeviceListView";
             this.DeviceListView.ShowItemToolTips = true;
-            this.DeviceListView.Size = new System.Drawing.Size(775, 169);
+            this.DeviceListView.Size = new System.Drawing.Size(775, 180);
             this.DeviceListView.SmallImageList = this.BrowserImageList;
             this.DeviceListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.DeviceListView.TabIndex = 4;
@@ -150,6 +153,7 @@ namespace Shelly_OTA_Win
             // 
             // DetailPanel
             // 
+            this.DetailPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DetailPanel.Controls.Add(this.DetailBox);
             this.DetailPanel.Controls.Add(this.UrlBox);
             this.DetailPanel.Enabled = false;
