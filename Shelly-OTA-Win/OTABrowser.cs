@@ -7,6 +7,8 @@ using System.Windows.Forms;
 
 using Makaretu.Dns;
 
+// https://markheath.net/post/maintainable-winforms
+
 namespace Shelly_OTA_Win
 {
     public partial class OTABrowser : Form
@@ -33,13 +35,13 @@ namespace Shelly_OTA_Win
 
         private void OTABrowser_Load(object sender, EventArgs e)
         {
-            StatusLabel.Text = "Checking latest firmware versions";
+            SafeStatusUpdate("Checking latest firmware versions");
             ShellyFirmwareAPI.Init();
             DeviceInventory.Init();
 
             AgeCheckTimer = new System.Threading.Timer(new System.Threading.TimerCallback(DeviceAgeCheck), null, 1250, 500);
 
-            StatusLabel.Text = "Please wait, devices will appear in the list once detected...";
+            SafeStatusUpdate("Please wait, devices will appear in the list once detected...");
             mdns.AnswerReceived += MdnsAnswerReceived;
             mdns.Start();
             mdns.SendQuery("_http._tcp.local");
@@ -68,7 +70,7 @@ namespace Shelly_OTA_Win
                 }
                 else if ((device.Age() < maxDeviceAge) && (device.stale is true))
                 {
-                    StatusLabel.Text = $"Device {device.name} no longer stale";
+                    SafeStatusUpdate($"Device {device.name} no longer stale");
                     device.stale = false;
                     state_changed = true;
                 }
@@ -119,6 +121,21 @@ namespace Shelly_OTA_Win
                 DeviceListView.EndUpdate();
             }
         }
+
+        // The StatusLabel is not a Control so it does not have its InvokeRequired/Invoke methods; this needs to be done
+        // through its parent.
+        public void SafeStatusUpdate(string text)
+        {
+            if (StatusStrip.InvokeRequired)
+            {
+                StatusStrip.Invoke(new Action(() => StatusStrip.Items.Find("StatusLabel", false).First().Text = text + " (invoked)"));
+            }
+            else
+            {
+                StatusStrip.Items.Find("StatusLabel", false).First().Text = text;
+            }
+        }
+
         // As this is being called from the mdns service, it may be run in a thread which is separate
         // from the thread where the Form exists. Therefore the form controls need to be accessed in a
         // thread-safe way via delegate function
@@ -133,14 +150,15 @@ namespace Shelly_OTA_Win
                     ShellyDevice mydev = DeviceInventory.FindByName(address.Name.ToString());
                     if (mydev is not null)
                     {
-                        StatusLabel.Text = $"Received update for device: {mydev.name}";
+                        SafeStatusUpdate($"Received update for device: {mydev.name}");
                         mydev.UpdateLastSeen();
                     }
                     else
                     {
-                        StatusLabel.Text = $"Discovering device: {address.Name} at {address.Address}";
+                        SafeStatusUpdate($"Discovering device: {address.Name} at {address.Address}");
                         mydev = await ShellyDevice.Discover(address);
-                        StatusLabel.Text = $"Discovered new {mydev.type} device at {mydev.address}";
+
+                        SafeStatusUpdate($"Discovered new {mydev.type} device at {mydev.address}");
                         DeviceInventory.AddDevice(mydev);
                         RefreshListView(DeviceInventory.All());
 
@@ -149,6 +167,7 @@ namespace Shelly_OTA_Win
                             UseWaitCursor = false;
                         }
 
+                        // TODO: Make this thread-safe as well
                         DeviceCountLabel.Text = $"{DeviceInventory.Count()} device" + (DeviceInventory.Count() > 1 ? "s" : "");
                     }
                 }
@@ -160,12 +179,12 @@ namespace Shelly_OTA_Win
             if (DeviceListView.SelectedIndices.Count != 0)
             {
                 var device = DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
-                StatusLabel.Text = $"Device {device.address} last seen {device.Age()} seconds ago, stale: {device.stale}";
+                SafeStatusUpdate($"Device {device.address} last seen {device.Age()} seconds ago, stale: {device.stale}");
                 DetailPanel.Enabled = true;
             }
             else
             {
-                StatusLabel.Text = "Selection cleared";
+                SafeStatusUpdate("Selection cleared");
                 DetailPanel.Enabled = false;
             }
         }
