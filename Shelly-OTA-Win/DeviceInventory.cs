@@ -5,36 +5,44 @@ namespace Shelly_OTA_Win
 {
     class DeviceInventory
     {
-        private static List<ShellyDevice> devices;
+        private PresentationService presenter;
+        private StatusService status_service;
 
-        public static void Init()
+        private List<ShellyDevice> devices;
+
+        public DeviceInventory(PresentationService pservice, StatusService sservice)
         {
+            presenter = pservice;
+            status_service = sservice;
             devices = new();
         }
 
-        public static void AddDevice(ShellyDevice device)
+        public void AddDevice(ShellyDevice device)
         {
             devices.Add(device);
         }
 
-        public static List<ShellyDevice> All()
+        public List<ShellyDevice> All()
         {
             return devices;
         }
 
-        public static ShellyDevice? FindByName(string name)
+        public ShellyDevice FindByName(string name)
         {
             return devices.Find(x => x.name == name);
         }
 
-        public static ShellyDevice? FindByMac(string mac)
+        public ShellyDevice FindByMac(string mac)
         {
             return devices.Find(x => x.mac == mac);
         }
 
-        public static int Count()
+        public int Count
         {
-            return devices.Count();
+            get
+            {
+                return devices.Count;
+            }
         }
     }
 }

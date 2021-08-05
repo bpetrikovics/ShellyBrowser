@@ -13,16 +13,16 @@ namespace Shelly_OTA_Win
 {
     public partial class OTABrowser : Form
     {
-        private delegate void SafeRefreshListViewDelegate(List<ShellyDevice> devices);
+        private static readonly MulticastService mdns = new();
+        private static readonly ServiceDiscovery sd = new(mdns);
 
-        public static MulticastService mdns = new();
-        public static ServiceDiscovery sd = new(mdns);
-
-        private static StatusService status;
+        private DeviceInventory inventory;
+        private PresentationService presenter;
+        private StatusService status;
 
         // This needs to be a class variable otherwise if just defined as a local variable, the garbage collector
         // will collect it due to lack of reference
-        public static System.Threading.Timer AgeCheckTimer;
+        private static System.Threading.Timer AgeCheckTimer;
 
         internal static List<ShellyDevice> Devices = new();
 
@@ -31,21 +31,23 @@ namespace Shelly_OTA_Win
 
         public OTABrowser()
         {
-            FormClosing += new FormClosingEventHandler(OTABrowser_Closing);
             InitializeComponent();
+
+            FormClosing += new FormClosingEventHandler(onMainFormClosing);
+            status = new StatusService(StatusStrip);
+            presenter = new PresentationService(DeviceListView);
+            inventory = new DeviceInventory(presenter, status);
         }
 
-        private void OTABrowser_Load(object sender, EventArgs e)
+        private void onMainFormLoad(object sender, EventArgs e)
         {
-            status = new StatusService(StatusStrip);
             status.Update("Checking latest firmware versions");
             ShellyFirmwareAPI.Init();
-            DeviceInventory.Init();
 
             AgeCheckTimer = new System.Threading.Timer(new System.Threading.TimerCallback(DeviceAgeCheck), null, 1250, 500);
 
             status.Update("Please wait, devices will appear in the list once detected...");
-            mdns.AnswerReceived += MdnsAnswerReceived;
+            mdns.AnswerReceived += onMdnsAnswerReceived;
             mdns.Start();
             mdns.SendQuery("_http._tcp.local");
         }
@@ -53,7 +55,7 @@ namespace Shelly_OTA_Win
         // This doesn't seem to properly work, likely because of threads e.g.
         // Exception thrown: 'System.ObjectDisposedException' in System.Net.Sockets.dll
         // Exception thrown: 'System.ObjectDisposedException' in System.Private.CoreLib.dll
-        private void OTABrowser_Closing(object sender, EventArgs e)
+        private void onMainFormClosing(object sender, EventArgs e)
         {
             sd.Dispose();
             mdns.Stop();
@@ -63,7 +65,7 @@ namespace Shelly_OTA_Win
         {
             var state_changed = false;
 
-            foreach (var device in DeviceInventory.All())
+            foreach (var device in inventory.All())
             {
                 if ((device.Age() >= maxDeviceAge) && (device.stale is false))
                 {
@@ -81,54 +83,14 @@ namespace Shelly_OTA_Win
 
             if(state_changed)
             {
-                RefreshListView(DeviceInventory.All());
-            }
-        }
-
-        private void RefreshListView(List<ShellyDevice> devices)
-        {
-            if (DeviceListView.InvokeRequired)
-            {
-                var d = new SafeRefreshListViewDelegate(RefreshListView);
-                DeviceListView.Invoke(d, new object[] { devices });
-            }
-            else
-            {
-                DeviceListView.BeginUpdate();
-                DeviceListView.Items.Clear();
-                foreach (var device in devices)
-                {
-                    var Item = new ListViewItem(device.name);
-                    Item.ImageIndex = device.auth is true ? 1 : 0;
-
-                    Item.SubItems.Add(device.mac);
-                    Item.SubItems.Add(device.address);
-                    Item.SubItems.Add(device.type);
-                    Item.SubItems.Add(device.fw);
-
-                    if (device.stale)
-                    {
-                        Item.UseItemStyleForSubItems = true;
-                        Item.ForeColor = Color.DarkGray;
-                        Item.ToolTipText = $"This device has not sent an update recently, it might have gone offline";
-                    }
-                    else if (device.fw != ShellyFirmwareAPI.getLatestVersionForModel(device.type))
-                    {
-                        Item.UseItemStyleForSubItems = false;
-                        Item.SubItems[4].ForeColor = Color.Red;
-                        Item.ToolTipText = $"New firmware available: {ShellyFirmwareAPI.getLatestVersionForModel(device.type)}";
-                    }
-
-                    DeviceListView.Items.Add(Item);
-                }
-                DeviceListView.EndUpdate();
+                presenter.RefreshListView(inventory.All());
             }
         }
 
         // As this is being called from the mdns service, it may be run in a thread which is separate
         // from the thread where the Form exists. Therefore the form controls need to be accessed in a
         // thread-safe way via delegate function
-        private async void MdnsAnswerReceived(object sender, MessageEventArgs e)
+        private async void onMdnsAnswerReceived(object sender, MessageEventArgs e)
         {
             var addresses = e.Message.Answers.OfType<AddressRecord>();
 
@@ -136,7 +98,7 @@ namespace Shelly_OTA_Win
             {
                 if (address.Name.ToString().StartsWith("shelly"))
                 {
-                    ShellyDevice mydev = DeviceInventory.FindByName(address.Name.ToString());
+                    ShellyDevice mydev = inventory.FindByName(address.Name.ToString());
                     if (mydev is not null)
                     {
                         status.Update($"Received update for device: {mydev.name}");
@@ -148,11 +110,10 @@ namespace Shelly_OTA_Win
                         mydev = await ShellyDevice.Discover(address);
 
                         status.Update($"Discovered new {mydev.type} device at {mydev.address}");
-                        DeviceInventory.AddDevice(mydev);
-                        RefreshListView(DeviceInventory.All());
+                        inventory.AddDevice(mydev);
+                        presenter.RefreshListView(inventory.All());
 
-                        // Thread-safe update of the device count label on the status strip
-                        status.UpdateDeviceCount(DeviceInventory.Count());
+                        status.UpdateDeviceCount(inventory.Count);
                     }
                 }
             }
@@ -162,7 +123,7 @@ namespace Shelly_OTA_Win
         {
             if (DeviceListView.SelectedIndices.Count != 0)
             {
-                var device = DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
+                var device = inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
                 status.Update($"Device {device.address} last seen {device.Age()} seconds ago");
                 DetailPanel.Enabled = true;
             }
@@ -195,7 +156,7 @@ namespace Shelly_OTA_Win
         {
             try
             {
-                VisitDeviceLink(DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text));
+                VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text));
             }
             catch (Exception exc)
             {
@@ -207,7 +168,7 @@ namespace Shelly_OTA_Win
         {
             try
             {
-                VisitDeviceLink(DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/shelly");
+                VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/shelly");
             }
             catch (Exception exc)
             {
@@ -219,7 +180,7 @@ namespace Shelly_OTA_Win
         {
             try
             {
-                VisitDeviceLink(DeviceInventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/status");
+                VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/status");
             }
             catch (Exception exc)
             {
