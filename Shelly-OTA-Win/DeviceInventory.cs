@@ -1,6 +1,8 @@
 ﻿using Makaretu.Dns;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Shelly_OTA_Win
 {
@@ -14,7 +16,7 @@ namespace Shelly_OTA_Win
 
         private List<ShellyDevice> devices;
 
-        private static System.Threading.Timer AgeCheckTimer;
+        private System.Threading.Timer AgeCheckTimer;
 
         // to be moved to app.config property later
         public static readonly int maxDeviceAge = 30;

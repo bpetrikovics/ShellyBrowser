@@ -7,8 +7,6 @@ using System.Windows.Forms;
 
 using Makaretu.Dns;
 
-// https://markheath.net/post/maintainable-winforms
-
 namespace Shelly_OTA_Win
 {
     public partial class OTABrowser : Form
@@ -58,29 +56,11 @@ namespace Shelly_OTA_Win
             }
         }
 
-        // simply Process.Start() an URI does not work anymore due to breaking API changes
-        private void VisitDeviceLink(ShellyDevice device, string path = "")
-        {
-            if (device is null)
-            {
-                // Should not happen, but handle error here anyway
-                MessageBox.Show("VisitDeviceLink() called with null device. This should not happen.");
-                return;
-            }
-
-            ProcessStartInfo psi = new()
-            {
-                FileName = $"http://{device.address}{path}",
-                UseShellExecute = true
-            };
-            Process.Start(psi);
-        }
-
         private void WebUILinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
-                VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text));
+                presenter.VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text));
             }
             catch (Exception exc)
             {
@@ -92,7 +72,7 @@ namespace Shelly_OTA_Win
         {
             try
             {
-                VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/shelly");
+                presenter.VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/shelly");
             }
             catch (Exception exc)
             {
@@ -104,7 +84,7 @@ namespace Shelly_OTA_Win
         {
             try
             {
-                VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/status");
+                presenter.VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/status");
             }
             catch (Exception exc)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -56,6 +57,23 @@ namespace Shelly_OTA_Win
                 }
                 listview.EndUpdate();
             }
+        }
+
+        public void VisitDeviceLink(ShellyDevice device, string path = "")
+        {
+            if (device is null)
+            {
+                // Should not happen, but handle error here anyway
+                MessageBox.Show("VisitDeviceLink() called with null device. This should not happen.");
+                return;
+            }
+
+            ProcessStartInfo psi = new()
+            {
+                FileName = $"http://{device.address}{path}",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
         }
 
     }
