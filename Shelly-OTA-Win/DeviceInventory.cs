@@ -12,7 +12,6 @@ namespace Shelly_OTA_Win
         private static readonly ServiceDiscovery sd = new(mdns);
 
         private PresentationService presenter;
-        private StatusService status_service;
 
         private List<ShellyDevice> devices;
 
@@ -21,10 +20,9 @@ namespace Shelly_OTA_Win
         // to be moved to app.config property later
         public static readonly int maxDeviceAge = 30;
 
-        public DeviceInventory(PresentationService pservice, StatusService sservice)
+        public DeviceInventory(PresentationService pservice)
         {
             presenter = pservice;
-            status_service = sservice;
             devices = new();
 
             AgeCheckTimer = new System.Threading.Timer(new System.Threading.TimerCallback(DeviceAgeCheck), null, 1250, 500);
@@ -48,7 +46,7 @@ namespace Shelly_OTA_Win
                 }
                 else if ((device.Age() < maxDeviceAge) && (device.stale is true))
                 {
-                    status_service.Update($"Device {device.name} no longer stale");
+                    presenter.UpdateStatus($"Device {device.name} no longer stale");
                     device.stale = false;
                     state_changed = true;
                 }
@@ -74,19 +72,19 @@ namespace Shelly_OTA_Win
                     ShellyDevice mydev = FindByName(address.Name.ToString());
                     if (mydev is not null)
                     {
-                        status_service.Update($"Received update for device: {mydev.name}");
+                        presenter.UpdateStatus($"Received update for device: {mydev.name}");
                         mydev.UpdateLastSeen();
                     }
                     else
                     {
-                        status_service.Update($"Discovering device: {address.Name} at {address.Address}");
+                        presenter.UpdateStatus($"Discovering device: {address.Name} at {address.Address}");
                         mydev = await ShellyDevice.Discover(address);
 
-                        status_service.Update($"Discovered new {mydev.type} device at {mydev.address}");
+                        presenter.UpdateStatus($"Discovered new {mydev.type} device at {mydev.address}");
                         AddDevice(mydev);
                         presenter.RefreshListView(All());
 
-                        status_service.UpdateDeviceCount(Count);
+                        presenter.UpdateDeviceCount(Count);
                     }
                 }
             }

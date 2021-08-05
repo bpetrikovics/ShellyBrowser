@@ -9,7 +9,6 @@ namespace Shelly_OTA_Win
     {
         private DeviceInventory inventory;
         private PresentationService presenter;
-        private StatusService status;
 
         internal static List<ShellyDevice> Devices = new();
 
@@ -18,15 +17,14 @@ namespace Shelly_OTA_Win
             InitializeComponent();
 
             FormClosing += new FormClosingEventHandler(onMainFormClosing);
-            status = new StatusService(StatusStrip);
-            presenter = new PresentationService(DeviceListView, DetailPanel);
-            inventory = new DeviceInventory(presenter, status);
+            presenter = new PresentationService(DeviceListView, DetailPanel, StatusStrip);
+            inventory = new DeviceInventory(presenter);
             ShellyFirmwareAPI.Init();
         }
 
         private void onMainFormLoad(object sender, EventArgs e)
         {
-            status.Update("Please wait, devices will appear in the list once detected...");
+            presenter.UpdateStatus("Please wait, devices will appear in the list once detected...");
         }
 
         // This doesn't seem to properly work, likely because of threads e.g.
@@ -39,17 +37,19 @@ namespace Shelly_OTA_Win
 
         private void DeviceListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (DeviceListView.SelectedIndices.Count != 0)
-            {
-                var device = inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
-                status.Update($"Device {device.address} last seen {device.Age()} seconds ago");
-                DetailPanel.Enabled = true;
-            }
-            else
-            {
-                status.Update("Selection cleared");
-                DetailPanel.Enabled = false;
-            }
+            presenter.SelectedDeviceChanged(DeviceListView.SelectedItems, inventory);
+
+            //if (DeviceListView.SelectedItems.Count != 0)
+            //{
+            //    var device = inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
+            //    status.Update($"Device {device.address} last seen {device.Age()} seconds ago");
+            //    DetailPanel.Enabled = true;
+            //}
+            //else
+            //{
+            //    status.Update("Selection cleared");
+            //    DetailPanel.Enabled = false;
+            //}
         }
 
         private void WebUILinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

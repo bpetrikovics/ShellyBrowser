@@ -13,14 +13,22 @@ namespace Shelly_OTA_Win
     {
         private readonly ListView listview;
         private readonly Panel panel;
+        private readonly GroupBox detailbox;
+        private readonly GroupBox upgradebox;
+        private readonly StatusStrip statusbar;
+
         private delegate void SafeRefreshListViewDelegate(List<ShellyDevice> devices);
 
-        public PresentationService(ListView listview, Panel panel)
+        public PresentationService(ListView listview, Panel panel, StatusStrip statusbar)
         {
             this.listview = listview;
             this.panel = panel;
+            this.detailbox = (GroupBox)this.panel.Controls.Find("DetailBox", false).FirstOrDefault();
+            this.upgradebox = (GroupBox)this.panel.Controls.Find("UpgradeBox", false).FirstOrDefault();
+            this.statusbar = statusbar;
         }
 
+        // FIXME: this loses selection since we clear the whole listview...
         public void RefreshListView(List<ShellyDevice> devices)
         {
             if (listview.InvokeRequired)
@@ -81,6 +89,40 @@ namespace Shelly_OTA_Win
                 UseShellExecute = true
             };
             Process.Start(psi);
+        }
+
+        public void SelectedDeviceChanged(ListView.SelectedListViewItemCollection selected, DeviceInventory inventory)
+        {
+            if (selected.Count != 0)
+            {
+                var device = inventory.FindByMac(selected[0].SubItems[1].Text);
+                UpdateStatus($"Device {device.address} last seen {device.Age()} seconds ago");
+                panel.Enabled = true;
+            }
+            else
+            {
+                //status.Update("Selection cleared");
+                panel.Enabled = false;
+
+            }
+        }
+        public void UpdateStatus(string text)
+        {
+            if (statusbar.InvokeRequired)
+            {
+                statusbar.Invoke(new Action(() => statusbar.Items.Find("StatusLabel", false).First().Text = text));
+            }
+            else
+            {
+                statusbar.Items.Find("StatusLabel", false).First().Text = text;
+            }
+        }
+
+        // Device count will be always updated from background thread, guaranteed not to be on the UI thread,
+        // so we can skip the check we do above
+        public void UpdateDeviceCount(int num)
+        {
+            statusbar.Invoke(new Action(() => statusbar.Items.Find("DeviceCountLabel", false).First().Text = $"{num} device" + (num > 1 ? "s" : "")));
         }
 
     }
