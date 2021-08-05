@@ -38,18 +38,6 @@ namespace Shelly_OTA_Win
         private void DeviceListView_SelectedIndexChanged(object sender, EventArgs e)
         {
             presenter.SelectedDeviceChanged(DeviceListView.SelectedItems, inventory);
-
-            //if (DeviceListView.SelectedItems.Count != 0)
-            //{
-            //    var device = inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
-            //    status.Update($"Device {device.address} last seen {device.Age()} seconds ago");
-            //    DetailPanel.Enabled = true;
-            //}
-            //else
-            //{
-            //    status.Update("Selection cleared");
-            //    DetailPanel.Enabled = false;
-            //}
         }
 
         private void WebUILinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
