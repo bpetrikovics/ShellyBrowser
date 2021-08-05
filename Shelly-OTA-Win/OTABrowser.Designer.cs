@@ -43,6 +43,9 @@ namespace Shelly_OTA_Win
             this.DeviceFirmware = new System.Windows.Forms.ColumnHeader();
             this.BrowserImageList = new System.Windows.Forms.ImageList(this.components);
             this.DetailPanel = new System.Windows.Forms.Panel();
+            this.UpgradeBox = new System.Windows.Forms.GroupBox();
+            this.StartUpgradeButton = new System.Windows.Forms.Button();
+            this.UpdateProxyCheckbox = new System.Windows.Forms.CheckBox();
             this.DetailBox = new System.Windows.Forms.GroupBox();
             this.UrlBox = new System.Windows.Forms.GroupBox();
             this.StatusLinkLabel = new System.Windows.Forms.LinkLabel();
@@ -50,6 +53,7 @@ namespace Shelly_OTA_Win
             this.WebUILinkLabel = new System.Windows.Forms.LinkLabel();
             this.StatusStrip.SuspendLayout();
             this.DetailPanel.SuspendLayout();
+            this.UpgradeBox.SuspendLayout();
             this.UrlBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,10 +87,11 @@ namespace Shelly_OTA_Win
             // DeviceCountLabel
             // 
             this.DeviceCountLabel.Name = "DeviceCountLabel";
-            this.DeviceCountLabel.Size = new System.Drawing.Size(715, 17);
+            this.DeviceCountLabel.Size = new System.Drawing.Size(684, 17);
             this.DeviceCountLabel.Spring = true;
             this.DeviceCountLabel.Text = "No devices";
             this.DeviceCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.DeviceCountLabel.Click += new System.EventHandler(this.DeviceCountLabel_Click);
             // 
             // DeviceListView
             // 
@@ -151,6 +156,7 @@ namespace Shelly_OTA_Win
             // DetailPanel
             // 
             this.DetailPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.DetailPanel.Controls.Add(this.UpgradeBox);
             this.DetailPanel.Controls.Add(this.DetailBox);
             this.DetailPanel.Controls.Add(this.UrlBox);
             this.DetailPanel.Enabled = false;
@@ -158,6 +164,37 @@ namespace Shelly_OTA_Win
             this.DetailPanel.Name = "DetailPanel";
             this.DetailPanel.Size = new System.Drawing.Size(775, 207);
             this.DetailPanel.TabIndex = 5;
+            // 
+            // UpgradeBox
+            // 
+            this.UpgradeBox.Controls.Add(this.StartUpgradeButton);
+            this.UpgradeBox.Controls.Add(this.UpdateProxyCheckbox);
+            this.UpgradeBox.Location = new System.Drawing.Point(561, 73);
+            this.UpgradeBox.Name = "UpgradeBox";
+            this.UpgradeBox.Size = new System.Drawing.Size(211, 131);
+            this.UpgradeBox.TabIndex = 2;
+            this.UpgradeBox.TabStop = false;
+            this.UpgradeBox.Text = "Firmware update";
+            // 
+            // StartUpgradeButton
+            // 
+            this.StartUpgradeButton.Location = new System.Drawing.Point(18, 64);
+            this.StartUpgradeButton.Name = "StartUpgradeButton";
+            this.StartUpgradeButton.Size = new System.Drawing.Size(174, 29);
+            this.StartUpgradeButton.TabIndex = 1;
+            this.StartUpgradeButton.Text = "Upgrade";
+            this.StartUpgradeButton.UseVisualStyleBackColor = true;
+            this.StartUpgradeButton.Click += new System.EventHandler(this.StartUpgradeButton_Click);
+            // 
+            // UpdateProxyCheckbox
+            // 
+            this.UpdateProxyCheckbox.AutoSize = true;
+            this.UpdateProxyCheckbox.Location = new System.Drawing.Point(7, 23);
+            this.UpdateProxyCheckbox.Name = "UpdateProxyCheckbox";
+            this.UpdateProxyCheckbox.Size = new System.Drawing.Size(174, 19);
+            this.UpdateProxyCheckbox.TabIndex = 0;
+            this.UpdateProxyCheckbox.Text = "Upgrade through OTA proxy";
+            this.UpdateProxyCheckbox.UseVisualStyleBackColor = true;
             // 
             // DetailBox
             // 
@@ -173,9 +210,9 @@ namespace Shelly_OTA_Win
             this.UrlBox.Controls.Add(this.StatusLinkLabel);
             this.UrlBox.Controls.Add(this.DeviceInfoLinkLabel);
             this.UrlBox.Controls.Add(this.WebUILinkLabel);
-            this.UrlBox.Location = new System.Drawing.Point(572, 3);
+            this.UrlBox.Location = new System.Drawing.Point(560, 3);
             this.UrlBox.Name = "UrlBox";
-            this.UrlBox.Size = new System.Drawing.Size(200, 63);
+            this.UrlBox.Size = new System.Drawing.Size(212, 63);
             this.UrlBox.TabIndex = 0;
             this.UrlBox.TabStop = false;
             this.UrlBox.Text = "Device URLs";
@@ -224,10 +261,12 @@ namespace Shelly_OTA_Win
             this.Controls.Add(this.BrowserLabel);
             this.Name = "OTABrowser";
             this.Text = "Shelly OTA Browser";
-            this.Load += new System.EventHandler(this.OTABrowser_Load);
+            this.Load += new System.EventHandler(this.onMainFormLoad);
             this.StatusStrip.ResumeLayout(false);
             this.StatusStrip.PerformLayout();
             this.DetailPanel.ResumeLayout(false);
+            this.UpgradeBox.ResumeLayout(false);
+            this.UpgradeBox.PerformLayout();
             this.UrlBox.ResumeLayout(false);
             this.UrlBox.PerformLayout();
             this.ResumeLayout(false);
@@ -253,6 +292,9 @@ namespace Shelly_OTA_Win
         private System.Windows.Forms.LinkLabel StatusLinkLabel;
         private System.Windows.Forms.GroupBox DetailBox;
         private System.Windows.Forms.ImageList BrowserImageList;
+        private System.Windows.Forms.GroupBox UpgradeBox;
+        private System.Windows.Forms.CheckBox UpdateProxyCheckbox;
+        private System.Windows.Forms.Button StartUpgradeButton;
     }
 }
 

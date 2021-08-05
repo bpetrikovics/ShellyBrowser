@@ -9,6 +9,7 @@
     <Company></Company>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <StartupObject>Shelly_OTA_Win.Program</StartupObject>
+    <Copyright></Copyright>
   </PropertyGroup>
 
   <ItemGroup>

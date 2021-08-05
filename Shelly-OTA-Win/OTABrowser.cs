@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-
-using Makaretu.Dns;
 
 namespace Shelly_OTA_Win
 {
@@ -23,7 +19,7 @@ namespace Shelly_OTA_Win
 
             FormClosing += new FormClosingEventHandler(onMainFormClosing);
             status = new StatusService(StatusStrip);
-            presenter = new PresentationService(DeviceListView);
+            presenter = new PresentationService(DeviceListView, DetailPanel);
             inventory = new DeviceInventory(presenter, status);
             ShellyFirmwareAPI.Init();
         }
@@ -58,6 +54,11 @@ namespace Shelly_OTA_Win
 
         private void WebUILinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            if (DeviceListView.SelectedItems.Count == 0)
+            {
+                return;
+            }
+
             try
             {
                 presenter.VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text));
@@ -70,6 +71,11 @@ namespace Shelly_OTA_Win
 
         private void DeviceInfoLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            if (DeviceListView.SelectedItems.Count == 0)
+            {
+                return;
+            }
+
             try
             {
                 presenter.VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/shelly");
@@ -82,6 +88,11 @@ namespace Shelly_OTA_Win
 
         private void StatusLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            if (DeviceListView.SelectedItems.Count == 0)
+            {
+                return;
+            }
+
             try
             {
                 presenter.VisitDeviceLink(inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text), "/status");
@@ -90,6 +101,16 @@ namespace Shelly_OTA_Win
             {
                 MessageBox.Show($"Unable to open link that was clicked: {exc}");
             }
+        }
+
+        private void StartUpgradeButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DeviceCountLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
