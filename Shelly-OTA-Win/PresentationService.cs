@@ -11,12 +11,14 @@ namespace Shelly_OTA_Win
 {
     class PresentationService
     {
-        private ListView listview;
+        private readonly ListView listview;
+        private readonly Panel panel;
         private delegate void SafeRefreshListViewDelegate(List<ShellyDevice> devices);
 
-        public PresentationService(ListView listview)
+        public PresentationService(ListView listview, Panel panel)
         {
             this.listview = listview;
+            this.panel = panel;
         }
 
         public void RefreshListView(List<ShellyDevice> devices)
@@ -55,7 +57,12 @@ namespace Shelly_OTA_Win
 
                     listview.Items.Add(Item);
                 }
+
                 listview.EndUpdate();
+                if (listview.SelectedItems.Count == 0)
+                {
+                    panel.Enabled = false;
+                }
             }
         }
 
