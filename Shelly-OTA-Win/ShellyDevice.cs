@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 using Makaretu.Dns;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -31,7 +32,7 @@ namespace Shelly_OTA_Win
         private static readonly HttpClient client = new HttpClient();
 
         [JsonConstructor]
-        public ShellyDevice(string type, string mac, bool auth, string fw, bool sleep_mode=false)
+        public ShellyDevice(string type, string mac, bool auth, string fw, bool sleep_mode = false)
         {
             this.type = type;
             this.mac = mac;
@@ -84,7 +85,7 @@ namespace Shelly_OTA_Win
             {
                 return false;
             }
-            
+
             return this.mac == other.mac;
         }
 

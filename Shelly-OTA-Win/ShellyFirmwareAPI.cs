@@ -18,7 +18,7 @@ namespace Shelly_OTA_Win
         {
             var json = await client.GetStringAsync(Baseurl);
             JObject data = JObject.Parse(json);
-            
+
             // Check if API reports the data is healthy
             if ((bool)(data["isok"]) is false)
             {

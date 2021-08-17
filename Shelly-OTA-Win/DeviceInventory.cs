@@ -1,8 +1,7 @@
-﻿using Makaretu.Dns;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
+
+using Makaretu.Dns;
 
 namespace Shelly_OTA_Win
 {

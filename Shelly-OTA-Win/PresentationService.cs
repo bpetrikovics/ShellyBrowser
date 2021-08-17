@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Shelly_OTA_Win
@@ -28,7 +26,7 @@ namespace Shelly_OTA_Win
             this.detailbox = (GroupBox)this.panel.Controls.Find("DetailBox", false).FirstOrDefault();
             this.upgradebox = (GroupBox)this.panel.Controls.Find("UpgradeBox", false).FirstOrDefault();
             this.statusbar = statusbar;
-            
+
             singledeviceview = new SingleDeviceView();
         }
 
