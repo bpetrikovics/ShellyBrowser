@@ -4,12 +4,13 @@ using System.Net.Http;
 
 using Makaretu.Dns;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Shelly_OTA_Win
 {
     // IEquatable makes List.Contains() work with ShellyDevice objects
     // It requires to implement Equals and GetHashCode
-    class ShellyDevice : System.IEquatable<ShellyDevice>
+    public class ShellyDevice : System.IEquatable<ShellyDevice>
     {
         // fields that are filled via JSON data from Shelly's status REST api
         public string type { get; set; }
@@ -23,7 +24,10 @@ namespace Shelly_OTA_Win
         public string name { get; set; }
         public DateTimeOffset lastseen { get; set; }
         public bool stale { get; set; }
+        public bool has_update { get; set; }
+        public bool update_mismatch { get; set; }
 
+        private JObject status_data;
         private static readonly HttpClient client = new HttpClient();
 
         [JsonConstructor]
@@ -46,6 +50,20 @@ namespace Shelly_OTA_Win
             dev.name = address.Name.ToString();
             dev.stale = false;
             dev.UpdateLastSeen();
+
+            result = await client.GetStringAsync($"http://{address.Address.ToString()}/status");
+            dev.status_data = JObject.Parse(result);
+            dev.has_update = (bool)dev.status_data[nameof(has_update)];
+
+            // If the device is not aware of the newer firmware, it might not have direct access to the internet
+            if ((dev.fw != ShellyFirmwareAPI.getLatestVersionForModel(dev.type)) && (dev.has_update is false))
+            {
+                dev.update_mismatch = true;
+            }
+            else
+            {
+                dev.update_mismatch = false;
+            }
 
             return dev;
         }

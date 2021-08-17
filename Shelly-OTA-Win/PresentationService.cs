@@ -17,6 +17,8 @@ namespace Shelly_OTA_Win
         private readonly GroupBox upgradebox;
         private readonly StatusStrip statusbar;
 
+        private readonly SingleDeviceView singledeviceview;
+
         private delegate void SafeRefreshListViewDelegate(List<ShellyDevice> devices);
 
         public PresentationService(ListView listview, Panel panel, StatusStrip statusbar)
@@ -26,6 +28,8 @@ namespace Shelly_OTA_Win
             this.detailbox = (GroupBox)this.panel.Controls.Find("DetailBox", false).FirstOrDefault();
             this.upgradebox = (GroupBox)this.panel.Controls.Find("UpgradeBox", false).FirstOrDefault();
             this.statusbar = statusbar;
+            
+            singledeviceview = new SingleDeviceView();
         }
 
         // FIXME: this loses selection since we clear the whole listview...
@@ -60,6 +64,7 @@ namespace Shelly_OTA_Win
                     {
                         Item.UseItemStyleForSubItems = false;
                         Item.SubItems[4].ForeColor = Color.Red;
+                        Item.ToolTipText = $"New firmware available: {ShellyFirmwareAPI.getLatestVersionForModel(device.type)}";
                         Item.ToolTipText = $"New firmware available: {ShellyFirmwareAPI.getLatestVersionForModel(device.type)}";
                     }
 
@@ -98,14 +103,32 @@ namespace Shelly_OTA_Win
                 var device = inventory.FindByMac(selected[0].SubItems[1].Text);
                 UpdateStatus($"Device {device.address} last seen {device.Age()} seconds ago");
                 panel.Enabled = true;
+
+                // Enable and populate the detail area with device information
+                detailbox.Text = device.name;
+                detailbox.Enabled = true;
+                singledeviceview.UpdateView(device);
+                detailbox.Controls.Add(singledeviceview);
+
+                // Set OTA checkbox?
+                if (device.update_mismatch)
+                {
+
+                }
+                else
+                {
+
+                }
             }
             else
             {
-                //status.Update("Selection cleared");
                 panel.Enabled = false;
-
+                detailbox.Controls.Remove(singledeviceview);
+                detailbox.Text = "Shelly Device Details";
+                detailbox.Enabled = false;
             }
         }
+
         public void UpdateStatus(string text)
         {
             if (statusbar.InvokeRequired)

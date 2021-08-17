@@ -17,8 +17,10 @@ namespace Shelly_OTA_Win
             InitializeComponent();
 
             FormClosing += new FormClosingEventHandler(onMainFormClosing);
+
             presenter = new PresentationService(DeviceListView, DetailPanel, StatusStrip);
             inventory = new DeviceInventory(presenter);
+
             ShellyFirmwareAPI.Init();
         }
 
@@ -93,12 +95,12 @@ namespace Shelly_OTA_Win
 
         private void StartUpgradeButton_Click(object sender, EventArgs e)
         {
-
+            //
         }
 
         private void DeviceCountLabel_Click(object sender, EventArgs e)
         {
-
+            //
         }
     }
 }

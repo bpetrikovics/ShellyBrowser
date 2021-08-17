@@ -11,7 +11,7 @@ namespace Shelly_OTA_Win
     {
         private static readonly HttpClient client = new HttpClient();
         private static readonly string Baseurl = "https://api.shelly.cloud/files/firmware";
-        private static List<ShellyFirmwareVersion> fwdata = new();
+        private static readonly List<ShellyFirmwareVersion> fwdata = new();
 
         // TODO: properly parse and interpret shelly API response
         public static async void Init()

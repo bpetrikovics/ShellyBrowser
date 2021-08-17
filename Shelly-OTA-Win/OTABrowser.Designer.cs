@@ -87,7 +87,7 @@ namespace Shelly_OTA_Win
             // DeviceCountLabel
             // 
             this.DeviceCountLabel.Name = "DeviceCountLabel";
-            this.DeviceCountLabel.Size = new System.Drawing.Size(684, 17);
+            this.DeviceCountLabel.Size = new System.Drawing.Size(715, 17);
             this.DeviceCountLabel.Spring = true;
             this.DeviceCountLabel.Text = "No devices";
             this.DeviceCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -198,12 +198,13 @@ namespace Shelly_OTA_Win
             // 
             // DetailBox
             // 
+            this.DetailBox.BackColor = System.Drawing.SystemColors.Control;
             this.DetailBox.Location = new System.Drawing.Point(4, 3);
             this.DetailBox.Name = "DetailBox";
             this.DetailBox.Size = new System.Drawing.Size(550, 201);
             this.DetailBox.TabIndex = 1;
             this.DetailBox.TabStop = false;
-            this.DetailBox.Text = "Shelly Device";
+            this.DetailBox.Text = "Shelly Device Details";
             // 
             // UrlBox
             // 
