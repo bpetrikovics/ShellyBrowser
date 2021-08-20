@@ -91,7 +91,6 @@ namespace ShellyBrowserApp
             this.DeviceCountLabel.Spring = true;
             this.DeviceCountLabel.Text = "No devices";
             this.DeviceCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.DeviceCountLabel.Click += new System.EventHandler(this.DeviceCountLabel_Click);
             // 
             // DeviceListView
             // 

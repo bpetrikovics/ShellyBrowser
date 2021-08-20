@@ -96,10 +96,5 @@ namespace ShellyBrowserApp
         {
             //
         }
-
-        private void DeviceCountLabel_Click(object sender, EventArgs e)
-        {
-            //
-        }
     }
 }

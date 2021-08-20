@@ -108,15 +108,8 @@ namespace ShellyBrowserApp
                 singledeviceview.UpdateView(device);
                 detailbox.Controls.Add(singledeviceview);
 
-                // Set OTA checkbox?
-                if (device.update_mismatch)
-                {
-
-                }
-                else
-                {
-
-                }
+                var box = (CheckBox)upgradebox.Controls.Find("UpdateProxyCheckbox", false).First();
+                box.Checked = device.update_mismatch;
             }
             else
             {
