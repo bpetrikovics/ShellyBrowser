@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Shelly_OTA_Win
+namespace ShellyBrowserApp
 {
     class PresentationService
     {

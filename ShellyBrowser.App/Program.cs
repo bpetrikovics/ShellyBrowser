@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Shelly_OTA_Win
+namespace ShellyBrowserApp
 {
     static class Program
     {
@@ -14,7 +14,7 @@ namespace Shelly_OTA_Win
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new OTABrowser());
+            Application.Run(new ShellyBrowser());
         }
     }
 }

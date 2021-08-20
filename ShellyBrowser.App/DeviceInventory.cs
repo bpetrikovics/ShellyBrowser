@@ -3,7 +3,7 @@ using System.Linq;
 
 using Makaretu.Dns;
 
-namespace Shelly_OTA_Win
+namespace ShellyBrowserApp
 {
     class DeviceInventory
     {

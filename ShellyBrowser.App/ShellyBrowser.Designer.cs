@@ -1,7 +1,7 @@
 ﻿
-namespace Shelly_OTA_Win
+namespace ShellyBrowserApp
 {
-    partial class OTABrowser
+    partial class ShellyBrowser
     {
         /// <summary>
         ///  Required designer variable.
@@ -30,7 +30,7 @@ namespace Shelly_OTA_Win
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OTABrowser));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShellyBrowser));
             this.BrowserLabel = new System.Windows.Forms.Label();
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -251,7 +251,7 @@ namespace Shelly_OTA_Win
             this.WebUILinkLabel.Text = "Web UI";
             this.WebUILinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebUILinkLabel_LinkClicked);
             // 
-            // OTABrowser
+            // ShellyBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -260,8 +260,8 @@ namespace Shelly_OTA_Win
             this.Controls.Add(this.DeviceListView);
             this.Controls.Add(this.StatusStrip);
             this.Controls.Add(this.BrowserLabel);
-            this.Name = "OTABrowser";
-            this.Text = "Shelly OTA Browser";
+            this.Name = "ShellyBrowser";
+            this.Text = "Shelly Browser";
             this.Load += new System.EventHandler(this.onMainFormLoad);
             this.StatusStrip.ResumeLayout(false);
             this.StatusStrip.PerformLayout();

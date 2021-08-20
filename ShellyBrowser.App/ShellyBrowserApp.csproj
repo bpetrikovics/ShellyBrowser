@@ -3,12 +3,12 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <RootNamespace>Shelly_OTA_Win</RootNamespace>
+    <RootNamespace>ShellyBrowserApp</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>Balazs Petrikovics</Authors>
     <Company></Company>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <StartupObject>Shelly_OTA_Win.Program</StartupObject>
+    <StartupObject>ShellyBrowserApp.Program</StartupObject>
     <Copyright></Copyright>
   </PropertyGroup>
 

@@ -7,7 +7,7 @@ using Makaretu.Dns;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Shelly_OTA_Win
+namespace ShellyBrowserApp
 {
     // IEquatable makes List.Contains() work with ShellyDevice objects
     // It requires to implement Equals and GetHashCode

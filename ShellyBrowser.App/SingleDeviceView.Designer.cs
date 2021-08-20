@@ -1,5 +1,5 @@
 ﻿
-namespace Shelly_OTA_Win
+namespace ShellyBrowserApp
 {
     partial class SingleDeviceView
     {

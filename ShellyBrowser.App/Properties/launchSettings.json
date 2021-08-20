@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Shelly-OTA-Win": {
+    "ShellyBrowser.App": {
       "commandName": "Project"
     }
   }

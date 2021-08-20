@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Shelly_OTA_Win
+namespace ShellyBrowserApp
 {
     public partial class SingleDeviceView : UserControl
     {

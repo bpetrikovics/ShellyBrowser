@@ -5,7 +5,7 @@ using System.Net.Http;
 
 using Newtonsoft.Json.Linq;
 
-namespace Shelly_OTA_Win
+namespace ShellyBrowserApp
 {
     class ShellyFirmwareAPI
     {

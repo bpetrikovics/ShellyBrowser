@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Shelly_OTA_Win
+namespace ShellyBrowserApp
 {
-    public partial class OTABrowser : Form
+    public partial class ShellyBrowser : Form
     {
         private DeviceInventory inventory;
         private PresentationService presenter;
 
         internal static List<ShellyDevice> Devices = new();
 
-        public OTABrowser()
+        public ShellyBrowser()
         {
             InitializeComponent();
 
