@@ -69,6 +69,20 @@ namespace ShellyBrowserApp
             return dev;
         }
 
+        public async Task<string> StartUpdate(string ota_url = "")
+        {
+            string uri = $"http://{this.address}/ota";
+            if (ota_url != "")
+            {
+                uri += "?url={ota_url}";
+            }
+            else
+            {
+                uri += "?update=true";
+            }
+            return await client.GetStringAsync(uri);
+        }
+
         public void UpdateLastSeen()
         {
             this.lastseen = (DateTimeOffset)DateTime.Now;

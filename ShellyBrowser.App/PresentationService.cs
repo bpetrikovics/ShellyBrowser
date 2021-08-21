@@ -120,6 +120,12 @@ namespace ShellyBrowserApp
             }
         }
 
+        public bool IsOtaProxySelected()
+        {
+            var box = (CheckBox)upgradebox.Controls.Find("UpdateProxyCheckbox", false).First();
+            return box.Checked;
+        }
+
         public void UpdateStatus(string text)
         {
             if (statusbar.InvokeRequired)

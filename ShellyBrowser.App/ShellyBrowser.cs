@@ -92,9 +92,20 @@ namespace ShellyBrowserApp
             }
         }
 
-        private void StartUpgradeButton_Click(object sender, EventArgs e)
+        private async void StartUpgradeButton_Click(object sender, EventArgs e)
         {
-            //
+            ShellyDevice device = inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
+
+            if (presenter.IsOtaProxySelected())
+            {
+                // start ota proxy etc
+            }
+            else
+            {
+                await device.StartUpdate("");
+            }
+
+            presenter.UpdateStatus($"Firmware upgrade requested on device {device.name}");
         }
     }
 }
