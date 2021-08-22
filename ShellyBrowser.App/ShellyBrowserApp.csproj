@@ -10,6 +10,9 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <StartupObject>ShellyBrowserApp.Program</StartupObject>
     <Copyright></Copyright>
+    <Product>ShellyBrowser</Product>
+    <PackageId>ShellyBrowser</PackageId>
+    <AssemblyName>ShellyBrowser</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

@@ -94,6 +94,11 @@ namespace ShellyBrowserApp
             devices.Add(device);
         }
 
+        public void DeleteDevice(ShellyDevice device)
+        {
+            devices.Remove(device);
+        }
+
         public List<ShellyDevice> All()
         {
             return devices;

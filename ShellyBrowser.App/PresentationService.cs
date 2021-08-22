@@ -108,8 +108,7 @@ namespace ShellyBrowserApp
                 singledeviceview.UpdateView(device);
                 detailbox.Controls.Add(singledeviceview);
 
-                var box = (CheckBox)upgradebox.Controls.Find("UpdateProxyCheckbox", false).First();
-                box.Checked = device.update_mismatch;
+                isOtaSelected = device.update_mismatch;
             }
             else
             {
@@ -120,10 +119,19 @@ namespace ShellyBrowserApp
             }
         }
 
-        public bool IsOtaProxySelected()
+        public bool isOtaSelected
         {
-            var box = (CheckBox)upgradebox.Controls.Find("UpdateProxyCheckbox", false).First();
-            return box.Checked;
+            get
+            {
+                var box = (CheckBox)upgradebox.Controls.Find("UpdateProxyCheckbox", false).First();
+                return box.Checked;
+            }
+            set
+            {
+                var box = (CheckBox)upgradebox.Controls.Find("UpdateProxyCheckbox", false).First();
+                box.Checked = value;
+
+            }
         }
 
         public void UpdateStatus(string text)

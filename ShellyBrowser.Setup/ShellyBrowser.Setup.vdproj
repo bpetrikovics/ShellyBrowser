@@ -181,7 +181,7 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Default Company Name"
+        "Manufacturer" = "8:PBG.hu"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:ShellyBrowser.Setup"
@@ -694,7 +694,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_71A85E1EC7384DCCBA67407E2A971CDC"
             {
-            "SourcePath" = "8:..\\ShellyBrowser.App\\obj\\Release\\net5.0-windows\\apphost.exe"
+            "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_9BCA459537344F8ABBFE9EC810DF6A0C"

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 using Makaretu.Dns;
 
@@ -27,6 +28,7 @@ namespace ShellyBrowserApp
         public bool stale { get; set; }
         public bool has_update { get; set; }
         public bool update_mismatch { get; set; }
+        public ShellyUpdateStatus status { get; set;  }
 
         private JObject status_data;
         private static readonly HttpClient client = new HttpClient();
@@ -41,10 +43,10 @@ namespace ShellyBrowserApp
             this.sleep_mode = sleep_mode;
         }
 
+        // TODO: Error handling...
         public static async Task<ShellyDevice> Discover(AddressRecord address)
         {
-            // TODO: error handling
-            var result = await client.GetStringAsync($"http://{address.Address.ToString()}/shelly");
+            var result = await client.GetStringAsync($"http://{address.Address}/shelly");
             ShellyDevice dev = JsonConvert.DeserializeObject<ShellyDevice>(result);
 
             dev.address = address.Address.ToString();
@@ -52,7 +54,7 @@ namespace ShellyBrowserApp
             dev.stale = false;
             dev.UpdateLastSeen();
 
-            result = await client.GetStringAsync($"http://{address.Address.ToString()}/status");
+            result = await client.GetStringAsync($"http://{address.Address}/status");
             dev.status_data = JObject.Parse(result);
             dev.has_update = (bool)dev.status_data[nameof(has_update)];
 
@@ -65,6 +67,10 @@ namespace ShellyBrowserApp
             {
                 dev.update_mismatch = false;
             }
+
+            // Also query the /ota API which apparently has similar information
+            result = await client.GetStringAsync($"http://{address.Address}/ota");
+            dev.status = JsonConvert.DeserializeObject<ShellyUpdateStatus>(result);
 
             return dev;
         }

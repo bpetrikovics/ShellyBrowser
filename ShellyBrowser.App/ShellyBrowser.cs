@@ -96,13 +96,17 @@ namespace ShellyBrowserApp
         {
             ShellyDevice device = inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
 
-            if (presenter.IsOtaProxySelected())
+            if (presenter.isOtaSelected)
             {
                 // start ota proxy etc
             }
             else
             {
                 await device.StartUpdate("");
+                // This forces re-discovery of the device, which will re-read the firmware details, so in case of a
+                // successful upgrade it will come up with the ner version
+                // Later on we might rather just invalidate the device or schedule an update thread
+                inventory.DeleteDevice(device);
             }
 
             presenter.UpdateStatus($"Firmware upgrade requested on device {device.name}");
