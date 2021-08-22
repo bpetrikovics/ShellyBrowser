@@ -30,7 +30,6 @@ namespace ShellyBrowserApp
         public bool update_mismatch { get; set; }
         public ShellyUpdateStatus status { get; set;  }
 
-        private JObject status_data;
         private static readonly HttpClient client = new HttpClient();
 
         [JsonConstructor]
@@ -52,14 +51,12 @@ namespace ShellyBrowserApp
             dev.address = address.Address.ToString();
             dev.name = address.Name.ToString();
             dev.stale = false;
-            dev.UpdateLastSeen();
 
-            result = await client.GetStringAsync($"http://{address.Address}/status");
-            dev.status_data = JObject.Parse(result);
-            dev.has_update = (bool)dev.status_data[nameof(has_update)];
+            dev.UpdateLastSeen();
+            await dev.UpdateOtaStatus();
 
             // If the device is not aware of the newer firmware, it might not have direct access to the internet
-            if ((dev.fw != ShellyFirmwareAPI.getLatestVersionForModel(dev.type)) && (dev.has_update is false))
+            if ((dev.fw != ShellyFirmwareAPI.getLatestVersionForModel(dev.type)) && (dev.status.has_update is false))
             {
                 dev.update_mismatch = true;
             }
@@ -67,10 +64,6 @@ namespace ShellyBrowserApp
             {
                 dev.update_mismatch = false;
             }
-
-            // Also query the /ota API which apparently has similar information
-            result = await client.GetStringAsync($"http://{address.Address}/ota");
-            dev.status = JsonConvert.DeserializeObject<ShellyUpdateStatus>(result);
 
             return dev;
         }
@@ -92,6 +85,12 @@ namespace ShellyBrowserApp
         public void UpdateLastSeen()
         {
             this.lastseen = (DateTimeOffset)DateTime.Now;
+        }
+
+        public async Task UpdateOtaStatus()
+        {
+            var result = await client.GetStringAsync($"http://{this.address}/ota");
+            this.status = JsonConvert.DeserializeObject<ShellyUpdateStatus>(result);
         }
 
         public int Age()
