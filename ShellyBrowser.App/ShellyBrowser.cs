@@ -9,8 +9,6 @@ namespace ShellyBrowserApp
         private DeviceInventory inventory;
         private PresentationService presenter;
 
-        internal static List<ShellyDevice> Devices = new();
-
         public ShellyBrowser()
         {
             InitializeComponent();
