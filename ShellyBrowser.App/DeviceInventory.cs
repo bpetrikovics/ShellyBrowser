@@ -73,7 +73,7 @@ namespace ShellyBrowserApp
                     {
                         presenter.UpdateStatus($"Received update for device: {mydev.name}");
                         mydev.UpdateLastSeen();
-                        mydev.UpdateOtaStatus();
+                        await mydev.UpdateOtaStatus();
                     }
                     else
                     {
