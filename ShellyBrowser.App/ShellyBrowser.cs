@@ -126,5 +126,15 @@ namespace ShellyBrowserApp
                 presenter.UpdateStatus("Proxy disabled");
             }
         }
+
+        private void OtaBindIPSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // OTA service bind IP changed, if it is running, must be stopped/restarted
+        }
+
+        private void OtaPortTextBox_TextChanged(object sender, EventArgs e)
+        {
+            // OTA service bind port changed, if it is running, must be stopped/restarted
+        }
     }
 }

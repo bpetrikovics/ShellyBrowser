@@ -184,6 +184,7 @@ namespace ShellyBrowserApp
             this.OtaPortTextBox.Size = new System.Drawing.Size(57, 23);
             this.OtaPortTextBox.TabIndex = 3;
             this.OtaPortTextBox.Text = "8080";
+            this.OtaPortTextBox.TextChanged += new System.EventHandler(this.OtaPortTextBox_TextChanged);
             // 
             // OtaBindIPSelector
             // 
@@ -192,6 +193,7 @@ namespace ShellyBrowserApp
             this.OtaBindIPSelector.Name = "OtaBindIPSelector";
             this.OtaBindIPSelector.Size = new System.Drawing.Size(109, 23);
             this.OtaBindIPSelector.TabIndex = 2;
+            this.OtaBindIPSelector.SelectedIndexChanged += new System.EventHandler(this.OtaBindIPSelector_SelectedIndexChanged);
             // 
             // StartUpgradeButton
             // 
