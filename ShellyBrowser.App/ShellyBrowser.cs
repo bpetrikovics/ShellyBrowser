@@ -15,10 +15,12 @@ namespace ShellyBrowserApp
 
             FormClosing += new FormClosingEventHandler(onMainFormClosing);
 
+            ShellyFirmwareAPI.Init(); // need to load firmware data before we'd start receiving device announcements
+
             presenter = new PresentationService(DeviceListView, DetailPanel, StatusStrip);
             inventory = new DeviceInventory(presenter);
 
-            ShellyFirmwareAPI.Init();
+            OtaService.Instance.Init();
         }
 
         private void onMainFormLoad(object sender, EventArgs e)
@@ -108,6 +110,20 @@ namespace ShellyBrowserApp
             }
 
             presenter.UpdateStatus($"Firmware upgrade requested on device {device.name}");
+        }
+
+        private void UpdateProxyCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (presenter.isOtaSelected)
+            {
+                OtaService.Instance.Start(presenter.otaBindAddress, presenter.otaBindPort);
+                presenter.UpdateStatus("Proxy enabled");
+            }
+            else
+            {
+                OtaService.Instance.Stop();
+                presenter.UpdateStatus("Proxy disabled");
+            }
         }
     }
 }

@@ -44,6 +44,8 @@ namespace ShellyBrowserApp
             this.BrowserImageList = new System.Windows.Forms.ImageList(this.components);
             this.DetailPanel = new System.Windows.Forms.Panel();
             this.UpgradeBox = new System.Windows.Forms.GroupBox();
+            this.OtaPortTextBox = new System.Windows.Forms.TextBox();
+            this.OtaBindIPSelector = new System.Windows.Forms.ComboBox();
             this.StartUpgradeButton = new System.Windows.Forms.Button();
             this.UpdateProxyCheckbox = new System.Windows.Forms.CheckBox();
             this.DetailBox = new System.Windows.Forms.GroupBox();
@@ -94,8 +96,6 @@ namespace ShellyBrowserApp
             // 
             // DeviceListView
             // 
-            this.DeviceListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.DeviceListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.DeviceName,
             this.DeviceMAC,
@@ -106,7 +106,7 @@ namespace ShellyBrowserApp
             this.DeviceListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.DeviceListView.HideSelection = false;
             this.DeviceListView.Location = new System.Drawing.Point(13, 34);
-            this.DeviceListView.MinimumSize = new System.Drawing.Size(4, 180);
+            this.DeviceListView.MinimumSize = new System.Drawing.Size(775, 180);
             this.DeviceListView.MultiSelect = false;
             this.DeviceListView.Name = "DeviceListView";
             this.DeviceListView.ShowItemToolTips = true;
@@ -166,6 +166,8 @@ namespace ShellyBrowserApp
             // 
             // UpgradeBox
             // 
+            this.UpgradeBox.Controls.Add(this.OtaPortTextBox);
+            this.UpgradeBox.Controls.Add(this.OtaBindIPSelector);
             this.UpgradeBox.Controls.Add(this.StartUpgradeButton);
             this.UpgradeBox.Controls.Add(this.UpdateProxyCheckbox);
             this.UpgradeBox.Location = new System.Drawing.Point(561, 73);
@@ -175,9 +177,25 @@ namespace ShellyBrowserApp
             this.UpgradeBox.TabStop = false;
             this.UpgradeBox.Text = "Firmware update";
             // 
+            // OtaPortTextBox
+            // 
+            this.OtaPortTextBox.Location = new System.Drawing.Point(135, 48);
+            this.OtaPortTextBox.Name = "OtaPortTextBox";
+            this.OtaPortTextBox.Size = new System.Drawing.Size(57, 23);
+            this.OtaPortTextBox.TabIndex = 3;
+            this.OtaPortTextBox.Text = "8080";
+            // 
+            // OtaBindIPSelector
+            // 
+            this.OtaBindIPSelector.FormattingEnabled = true;
+            this.OtaBindIPSelector.Location = new System.Drawing.Point(18, 48);
+            this.OtaBindIPSelector.Name = "OtaBindIPSelector";
+            this.OtaBindIPSelector.Size = new System.Drawing.Size(109, 23);
+            this.OtaBindIPSelector.TabIndex = 2;
+            // 
             // StartUpgradeButton
             // 
-            this.StartUpgradeButton.Location = new System.Drawing.Point(18, 64);
+            this.StartUpgradeButton.Location = new System.Drawing.Point(18, 85);
             this.StartUpgradeButton.Name = "StartUpgradeButton";
             this.StartUpgradeButton.Size = new System.Drawing.Size(174, 29);
             this.StartUpgradeButton.TabIndex = 1;
@@ -188,12 +206,13 @@ namespace ShellyBrowserApp
             // UpdateProxyCheckbox
             // 
             this.UpdateProxyCheckbox.AutoSize = true;
-            this.UpdateProxyCheckbox.Location = new System.Drawing.Point(7, 23);
+            this.UpdateProxyCheckbox.Location = new System.Drawing.Point(18, 23);
             this.UpdateProxyCheckbox.Name = "UpdateProxyCheckbox";
             this.UpdateProxyCheckbox.Size = new System.Drawing.Size(174, 19);
             this.UpdateProxyCheckbox.TabIndex = 0;
             this.UpdateProxyCheckbox.Text = "Upgrade through OTA proxy";
             this.UpdateProxyCheckbox.UseVisualStyleBackColor = true;
+            this.UpdateProxyCheckbox.CheckedChanged += new System.EventHandler(this.UpdateProxyCheckbox_CheckedChanged);
             // 
             // DetailBox
             // 
@@ -295,6 +314,8 @@ namespace ShellyBrowserApp
         private System.Windows.Forms.GroupBox UpgradeBox;
         private System.Windows.Forms.CheckBox UpdateProxyCheckbox;
         private System.Windows.Forms.Button StartUpgradeButton;
+        private System.Windows.Forms.ComboBox OtaBindIPSelector;
+        private System.Windows.Forms.TextBox OtaPortTextBox;
     }
 }
 

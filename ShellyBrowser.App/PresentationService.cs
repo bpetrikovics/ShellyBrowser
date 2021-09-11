@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
 
 namespace ShellyBrowserApp
@@ -14,6 +15,9 @@ namespace ShellyBrowserApp
         private readonly GroupBox detailbox;
         private readonly GroupBox upgradebox;
         private readonly StatusStrip statusbar;
+
+        private readonly ComboBox ipselector;
+        private readonly TextBox bindport;
 
         private readonly SingleDeviceView singledeviceview;
 
@@ -27,7 +31,24 @@ namespace ShellyBrowserApp
             this.upgradebox = (GroupBox)this.panel.Controls.Find("UpgradeBox", false).FirstOrDefault();
             this.statusbar = statusbar;
 
+            this.ipselector = (ComboBox)upgradebox.Controls.Find("OtaBindIPSelector", false).First();
+            this.bindport = (TextBox)upgradebox.Controls.Find("OtaPortTextBox", false).First();
+
             singledeviceview = new SingleDeviceView();
+
+            // feed this into listbox
+            string hostName = Dns.GetHostName();
+            IPAddress[] localIPs = Dns.GetHostAddresses(hostName);
+
+            foreach (var address in localIPs)
+            {
+                if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    ipselector.Items.Add(address);
+                }
+            }
+
+            ipselector.SelectedIndex = ipselector.Items.Count - 1;
         }
 
         // FIXME: this loses selection since we clear the whole listview...
@@ -130,7 +151,22 @@ namespace ShellyBrowserApp
             {
                 var box = (CheckBox)upgradebox.Controls.Find("UpdateProxyCheckbox", false).First();
                 box.Checked = value;
+            }
+        }
 
+        public string otaBindAddress
+        {
+            get
+            {
+                return this.ipselector.Text;
+            }
+        }
+
+        public string otaBindPort
+        {
+            get
+            {
+                return this.bindport.Text;
             }
         }
 
