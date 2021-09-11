@@ -98,8 +98,9 @@ namespace ShellyBrowserApp
             {
                 var firmware = ShellyFirmwareAPI.getLatestFirmware(device);
                 await OtaService.Instance.PreloadAsync(firmware);
-                //await device.StartUpdate($"http://{presenter.otaBindAddress}:{presenter.otaBindPort}/ota/someurl");
                 presenter.UpdateStatus($"Firmware preloaded for {device.type}");
+                // await device.StartUpdate(OtaService.Instance.GetDownloadAddress(device.type));
+                // presenter.UpdateStatus($"Firmware upgrade requested on device {device.name} via OTA proxy");
             }
             else
             {

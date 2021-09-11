@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,7 +13,7 @@ namespace ShellyBrowserApp
     public sealed class OtaService
     {
         private static readonly string UrlPrefix = "ota";
-        
+
         private static OtaService _instance = null;
         private static readonly object _lock = new();
 
@@ -70,7 +67,8 @@ namespace ShellyBrowserApp
                 // do something to handle requests here,
                 // start handler thread etc
             }
-            catch (HttpListenerException exc) {
+            catch (HttpListenerException exc)
+            {
                 // In case of an exception, the listener seems to be already disposed, so subsequent start() calls will fail!
                 MessageBox.Show($"Exception while trying to bind to {addr}:{port}:\n{exc}");
                 Stop();
@@ -114,9 +112,14 @@ namespace ShellyBrowserApp
             }
         }
 
-        public static string GetDownloadAddress(string bindAddress, string bindPort, string deviceModel)
+        public string GetDownloadAddress(string deviceModel)
         {
-            return $"http://{bindAddress}:{bindPort}/{UrlPrefix}/{deviceModel}";
+            if (!started)
+            {
+                throw new MethodAccessException("GetDownloadAddress() called before starting OtaService");
+            }
+
+            return $"http://{addr}:{port}/{UrlPrefix}/{deviceModel}";
         }
     }
 }
