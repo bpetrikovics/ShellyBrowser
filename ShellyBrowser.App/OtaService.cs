@@ -24,10 +24,12 @@ namespace ShellyBrowserApp
 
         private HttpListener listener = null;
         private bool started = false;
+        private string addr = null;
+        private string port = null;
 
         OtaService()
         {
-            //
+            // Intentionally left blank :)
         }
 
         public static OtaService Instance
@@ -53,28 +55,45 @@ namespace ShellyBrowserApp
                 Stop();
             }
 
+            addr = bindAddress;
+            port = bindPort;
+
             try
             {
                 listener = new();
                 listener.Prefixes.Clear();
-                listener.Prefixes.Add($"http://{bindAddress}:{bindPort}/{UrlPrefix}/");
+                Netsh.AddUrlAcl($"http://{addr}:{port}/{UrlPrefix}/");
+                listener.Prefixes.Add($"http://{addr}:{port}/{UrlPrefix}/");
                 listener.Start();
                 started = true;
+
+                // do something to handle requests here,
+                // start handler thread etc
             }
             catch (HttpListenerException exc) {
                 // In case of an exception, the listener seems to be already disposed, so subsequent start() calls will fail!
-                MessageBox.Show($"Exception while trying to bind to {bindAddress}:{bindPort}:\n{exc}");
+                MessageBox.Show($"Exception while trying to bind to {addr}:{port}:\n{exc}");
                 Stop();
             }
         }
 
         public void Stop()
         {
+            // In case the UrlAcl was added but then te listener threw an exception, we need to
+            // be able to remove the previously added Acl; since at stop time we explicitly set the
+            // address/port to null, we can can use that to check if we have something to remove
+            if (addr is not null)
+            {
+                Netsh.DeleteUrlAcl($"http://{addr}:{port}/{UrlPrefix}/");
+            }
+
             if (started)
             {
                 listener.Stop();
                 listener.Close();
                 started = false;
+                addr = null;
+                port = null;
             }
         }
 
@@ -93,6 +112,11 @@ namespace ShellyBrowserApp
                     Firmwares.Add(firmware.deviceModel, response);
                 }
             }
+        }
+
+        public static string GetDownloadAddress(string bindAddress, string bindPort, string deviceModel)
+        {
+            return $"http://{bindAddress}:{bindPort}/{UrlPrefix}/{deviceModel}";
         }
     }
 }
