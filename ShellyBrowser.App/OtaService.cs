@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,14 +15,19 @@ namespace ShellyBrowserApp
     // Singleton class; background service that provides the OTA proxy webserver
     public sealed class OtaService
     {
+        private static readonly string UrlPrefix = "ota";
+        
         private static OtaService _instance = null;
         private static readonly object _lock = new();
+
+        private static Dictionary<string, byte[]> Firmwares = new();
 
         private HttpListener listener = null;
         private bool started = false;
 
         OtaService()
         {
+            //
         }
 
         public static OtaService Instance
@@ -39,11 +46,6 @@ namespace ShellyBrowserApp
             }
         }
 
-        public void Init()
-        {
-            listener = new();
-        }
-
         public void Start(string bindAddress, string bindPort)
         {
             if (started)
@@ -53,13 +55,16 @@ namespace ShellyBrowserApp
 
             try
             {
+                listener = new();
                 listener.Prefixes.Clear();
-                listener.Prefixes.Add($"http://{bindAddress}:{bindPort}/ota/");
+                listener.Prefixes.Add($"http://{bindAddress}:{bindPort}/{UrlPrefix}/");
                 listener.Start();
                 started = true;
             }
-            catch (Exception exc) {
-                MessageBox.Show($"Exception: {exc}");
+            catch (HttpListenerException exc) {
+                // In case of an exception, the listener seems to be already disposed, so subsequent start() calls will fail!
+                MessageBox.Show($"Exception while trying to bind to {bindAddress}:{bindPort}:\n{exc}");
+                Stop();
             }
         }
 
@@ -68,7 +73,25 @@ namespace ShellyBrowserApp
             if (started)
             {
                 listener.Stop();
+                listener.Close();
                 started = false;
+            }
+        }
+
+        public async Task PreloadAsync(ShellyFirmwareVersion firmware)
+        {
+            if (!Firmwares.ContainsKey(firmware.deviceModel))
+            {
+                // Download the firmware file specified in the firmware object and prepare it in the
+                // OTA server's file cache
+                HttpClient client = new();
+                var response = await client.GetByteArrayAsync(firmware.downloadUrl);
+
+                // Since the http service runs in a separate thread, protect the firmware dictionary with locking
+                lock (_lock)
+                {
+                    Firmwares.Add(firmware.deviceModel, response);
+                }
             }
         }
     }

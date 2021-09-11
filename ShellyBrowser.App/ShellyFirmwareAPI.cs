@@ -43,7 +43,7 @@ namespace ShellyBrowserApp
         }
     }
 
-    class ShellyFirmwareVersion
+    public class ShellyFirmwareVersion
     {
         public string deviceModel { get; set; }
         public string availableVersion { get; set; }

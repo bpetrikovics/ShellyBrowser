@@ -19,8 +19,6 @@ namespace ShellyBrowserApp
 
             presenter = new PresentationService(DeviceListView, DetailPanel, StatusStrip);
             inventory = new DeviceInventory(presenter);
-
-            OtaService.Instance.Init();
         }
 
         private void onMainFormLoad(object sender, EventArgs e)
@@ -98,30 +96,35 @@ namespace ShellyBrowserApp
 
             if (presenter.isOtaSelected)
             {
-                // start ota proxy etc
+                // Once the feature is working properly, will nove the proxy startup/shutdown here,
+                // so we're not listening on the port all the time when the user clicks the checkbox
+
+                var firmware = ShellyFirmwareAPI.getLatestFirmware(device);
+                await OtaService.Instance.PreloadAsync(firmware);
+                //await device.StartUpdate($"http://{presenter.otaBindAddress}:{presenter.otaBindPort}/ota/someurl");
+                presenter.UpdateStatus($"Firmware preloaded for {device.type}");
             }
             else
             {
                 await device.StartUpdate("");
-                // This forces re-discovery of the device, which will re-read the firmware details, so in case of a
-                // successful upgrade it will come up with the ner version
+                presenter.UpdateStatus($"Firmware upgrade requested on device {device.name}");
+                // This forces re-discovery of the device, which will re-read the firmware details,
+                // so in case of a successful upgrade it will come up with the new version.
                 // Later on we might rather just invalidate the device or schedule an update thread
                 inventory.DeleteDevice(device);
             }
-
-            presenter.UpdateStatus($"Firmware upgrade requested on device {device.name}");
         }
 
         private void UpdateProxyCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if (presenter.isOtaSelected)
             {
-                OtaService.Instance.Start(presenter.otaBindAddress, presenter.otaBindPort);
+                //OtaService.Instance.Start(presenter.otaBindAddress, presenter.otaBindPort);
                 presenter.UpdateStatus("Proxy enabled");
             }
             else
             {
-                OtaService.Instance.Stop();
+                //OtaService.Instance.Stop();
                 presenter.UpdateStatus("Proxy disabled");
             }
         }
