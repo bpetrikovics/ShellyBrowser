@@ -99,7 +99,9 @@ namespace ShellyBrowserApp
                 var firmware = ShellyFirmwareAPI.getLatestFirmware(device);
                 await OtaService.Instance.PreloadAsync(firmware);
                 presenter.UpdateStatus($"Firmware preloaded for {device.type}");
+                // OtaService.Instance.Start(presenter.otaBindAddress, presenter.otaBindPort);
                 // await device.StartUpdate(OtaService.Instance.GetDownloadAddress(device.type));
+                // OtaService.Instance.Stop(); // ??
                 // presenter.UpdateStatus($"Firmware upgrade requested on device {device.name} via OTA proxy");
             }
             else
@@ -110,6 +112,7 @@ namespace ShellyBrowserApp
                 // so in case of a successful upgrade it will come up with the new version.
                 // Later on we might rather just invalidate the device or schedule an update thread
                 inventory.DeleteDevice(device);
+                presenter.RefreshListView(inventory.All());
             }
         }
 
@@ -117,12 +120,12 @@ namespace ShellyBrowserApp
         {
             if (presenter.isOtaSelected)
             {
-                OtaService.Instance.Start(presenter.otaBindAddress, presenter.otaBindPort);
+                // OtaService.Instance.Start(presenter.otaBindAddress, presenter.otaBindPort);
                 presenter.UpdateStatus("Proxy enabled");
             }
             else
             {
-                OtaService.Instance.Stop();
+                // OtaService.Instance.Stop();
                 presenter.UpdateStatus("Proxy disabled");
             }
         }
