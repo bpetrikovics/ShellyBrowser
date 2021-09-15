@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace ShellyBrowserApp
@@ -13,6 +12,11 @@ namespace ShellyBrowserApp
         {
             InitializeComponent();
 
+            if (Utils.IsAdministrator())
+            {
+                Text += " (Administrator)";
+            }
+
             FormClosing += new FormClosingEventHandler(onMainFormClosing);
 
             ShellyFirmwareAPI.Init(); // need to load firmware data before we'd start receiving device announcements
@@ -23,6 +27,11 @@ namespace ShellyBrowserApp
 
         private void onMainFormLoad(object sender, EventArgs e)
         {
+            if (!Utils.IsAdministrator())
+            {
+                presenter.NotifyMessage("Application is not running as admin. The OTA proxy feature either needs admin rights or will display an UAC popup every time it's activating or deactivating.");
+            }
+
             presenter.UpdateStatus("Please wait, devices will appear in the list once detected...");
         }
 
