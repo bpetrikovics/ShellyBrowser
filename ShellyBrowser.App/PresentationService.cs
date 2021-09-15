@@ -51,6 +51,11 @@ namespace ShellyBrowserApp
             ipselector.SelectedIndex = ipselector.Items.Count - 1;
         }
 
+        internal void NotifyMessage(string message)
+        {
+            MessageBox.Show(message, "Shelly Browser");
+        }
+
         // FIXME: this loses selection since we clear the whole listview...
         public void RefreshListView(List<ShellyDevice> devices)
         {
