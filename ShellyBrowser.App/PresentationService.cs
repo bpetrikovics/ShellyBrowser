@@ -51,6 +51,7 @@ namespace ShellyBrowserApp
             ipselector.SelectedIndex = ipselector.Items.Count - 1;
         }
 
+        // Someday we should implement something slightly more sophisticated
         internal void NotifyMessage(string message)
         {
             MessageBox.Show(message, "Shelly Browser");
@@ -88,7 +89,6 @@ namespace ShellyBrowserApp
                     {
                         Item.UseItemStyleForSubItems = false;
                         Item.SubItems[4].ForeColor = Color.Red;
-                        Item.ToolTipText = $"New firmware available: {ShellyFirmwareAPI.getLatestVersionForModel(device.type)}";
                         Item.ToolTipText = $"New firmware available: {ShellyFirmwareAPI.getLatestVersionForModel(device.type)}";
                     }
 
