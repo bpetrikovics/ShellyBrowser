@@ -12,11 +12,6 @@ namespace ShellyBrowserApp
         {
             InitializeComponent();
 
-            if (Utils.IsAdministrator())
-            {
-                Text += " (Administrator)";
-            }
-
             FormClosing += new FormClosingEventHandler(onMainFormClosing);
 
             ShellyFirmwareAPI.Init(); // need to load firmware data before we'd start receiving device announcements
@@ -27,7 +22,12 @@ namespace ShellyBrowserApp
 
         private void onMainFormLoad(object sender, EventArgs e)
         {
-            if (!Utils.IsAdministrator())
+
+            if (Utils.IsAdministrator())
+            {
+                Text += " (Administrator)";
+            }
+            else
             {
                 presenter.NotifyMessage("Application is not running as admin. The OTA proxy feature either needs admin rights or will display an UAC popup every time it's activating or deactivating.");
             }
