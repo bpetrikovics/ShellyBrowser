@@ -120,7 +120,7 @@ namespace ShellyBrowserApp
             Process.Start(psi);
         }
 
-        public void SelectedDeviceChanged(ListView.SelectedListViewItemCollection selected, DeviceInventory inventory)
+        public void SelectedDeviceChanged(ListView.SelectedListViewItemCollection selected, InventoryService inventory)
         {
             if (selected.Count != 0)
             {

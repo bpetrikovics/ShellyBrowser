@@ -5,7 +5,7 @@ using Makaretu.Dns;
 
 namespace ShellyBrowserApp
 {
-    class DeviceInventory
+    class InventoryService
     {
         private static readonly MulticastService mdns = new();
         private static readonly ServiceDiscovery sd = new(mdns);
@@ -19,7 +19,7 @@ namespace ShellyBrowserApp
         // to be moved to app.config property later
         public static readonly int maxDeviceAge = 30;
 
-        public DeviceInventory(PresentationService pservice)
+        public InventoryService(PresentationService pservice)
         {
             presenter = pservice;
             devices = new();

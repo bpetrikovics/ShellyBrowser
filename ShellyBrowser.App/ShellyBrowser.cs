@@ -5,7 +5,7 @@ namespace ShellyBrowserApp
 {
     public partial class ShellyBrowser : Form
     {
-        private DeviceInventory inventory;
+        private InventoryService inventory;
         private PresentationService presenter;
 
         public ShellyBrowser()
@@ -17,7 +17,7 @@ namespace ShellyBrowserApp
             ShellyFirmwareAPI.Init(); // need to load firmware data before we'd start receiving device announcements
 
             presenter = new PresentationService(DeviceListView, DetailPanel, StatusStrip);
-            inventory = new DeviceInventory(presenter);
+            inventory = new InventoryService(presenter);
         }
 
         private void onMainFormLoad(object sender, EventArgs e)
