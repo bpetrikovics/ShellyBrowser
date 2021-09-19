@@ -19,7 +19,7 @@ namespace ShellyBrowserApp
         private static OtaService _instance = null;
         private static readonly object _lock = new();
 
-        private static Dictionary<string, byte[]> Firmwares = new();
+        private static readonly Dictionary<string, byte[]> Firmwares = new();
 
         private HttpListener listener = null;
         private bool started = false;
