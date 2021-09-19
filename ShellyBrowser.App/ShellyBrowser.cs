@@ -99,6 +99,7 @@ namespace ShellyBrowserApp
             }
         }
 
+        //TODO move logic out of the browser into a separate service
         private async void StartUpgradeButton_Click(object sender, EventArgs e)
         {
             ShellyDevice device = inventory.FindByMac(DeviceListView.SelectedItems[0].SubItems[1].Text);
