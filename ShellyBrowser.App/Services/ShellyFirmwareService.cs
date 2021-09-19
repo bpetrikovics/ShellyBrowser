@@ -5,9 +5,11 @@ using System.Net.Http;
 
 using Newtonsoft.Json.Linq;
 
+using ShellyBrowserApp.Models;
+
 namespace ShellyBrowserApp
 {
-    class ShellyFirmwareAPI
+    class ShellyFirmwareService
     {
         private static readonly HttpClient client = new HttpClient();
         private static readonly string Baseurl = "https://api.shelly.cloud/files/firmware";
@@ -40,25 +42,6 @@ namespace ShellyBrowserApp
         public static ShellyFirmwareVersion getLatestFirmware(ShellyDevice device)
         {
             return fwdata.Find(x => x.deviceModel == device.type);
-        }
-    }
-
-    public class ShellyFirmwareVersion
-    {
-        public string deviceModel { get; set; }
-        public string availableVersion { get; set; }
-        public string downloadUrl { get; set; }
-
-        public ShellyFirmwareVersion(string model, string version, string url)
-        {
-            this.deviceModel = model;
-            this.availableVersion = version;
-            this.downloadUrl = url;
-        }
-
-        public override string ToString()
-        {
-            return $"<ShellyFirmware model={this.deviceModel}, version={this.availableVersion}, url={this.downloadUrl}>";
         }
     }
 }

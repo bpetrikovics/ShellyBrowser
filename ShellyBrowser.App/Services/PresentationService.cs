@@ -85,11 +85,11 @@ namespace ShellyBrowserApp
                         Item.ForeColor = Color.DarkGray;
                         Item.ToolTipText = $"This device has not sent an update recently, it might have gone offline";
                     }
-                    else if (device.fw != ShellyFirmwareAPI.getLatestVersionForModel(device.type))
+                    else if (device.fw != ShellyFirmwareService.getLatestVersionForModel(device.type))
                     {
                         Item.UseItemStyleForSubItems = false;
                         Item.SubItems[4].ForeColor = Color.Red;
-                        Item.ToolTipText = $"New firmware available: {ShellyFirmwareAPI.getLatestVersionForModel(device.type)}";
+                        Item.ToolTipText = $"New firmware available: {ShellyFirmwareService.getLatestVersionForModel(device.type)}";
                     }
 
                     listview.Items.Add(Item);

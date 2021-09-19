@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using ShellyBrowserApp.Models;
+
 // https://docs.microsoft.com/en-us/dotnet/api/system.net.httplistener?view=net-5.0
 
 namespace ShellyBrowserApp

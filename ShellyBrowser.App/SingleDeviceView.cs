@@ -19,7 +19,7 @@ namespace ShellyBrowserApp
 
         public void UpdateView(ShellyDevice device)
         {
-            UpdateStatusLabel.Text = device.fw != ShellyFirmwareAPI.getLatestVersionForModel(device.type) ? "An updated firmware is available for this device" : "No firmware update for this device";
+            UpdateStatusLabel.Text = device.fw != ShellyFirmwareService.getLatestVersionForModel(device.type) ? "An updated firmware is available for this device" : "No firmware update for this device";
             InternetAccessLabel.Text = device.update_mismatch ? "The device is not aware of the new firmware, OTA proxy might be needed" : "Device firmware state consistent with Shelly firmware API response.";
         }
     }

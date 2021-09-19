@@ -14,7 +14,7 @@ namespace ShellyBrowserApp
 
             FormClosing += new FormClosingEventHandler(onMainFormClosing);
 
-            ShellyFirmwareAPI.Init(); // need to load firmware data before we'd start receiving device announcements
+            ShellyFirmwareService.Init(); // need to load firmware data before we'd start receiving device announcements
 
             presenter = new PresentationService(DeviceListView, DetailPanel, StatusStrip);
             inventory = new InventoryService(presenter);
@@ -105,7 +105,7 @@ namespace ShellyBrowserApp
 
             if (presenter.isOtaSelected)
             {
-                var firmware = ShellyFirmwareAPI.getLatestFirmware(device);
+                var firmware = ShellyFirmwareService.getLatestFirmware(device);
                 await OtaService.Instance.PreloadAsync(firmware);
                 presenter.UpdateStatus($"Firmware preloaded for {device.type}");
                 // OtaService.Instance.Start(presenter.otaBindAddress, presenter.otaBindPort);

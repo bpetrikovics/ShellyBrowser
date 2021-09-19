@@ -56,7 +56,7 @@ namespace ShellyBrowserApp
             await dev.UpdateOtaStatus();
 
             // If the device is not aware of the newer firmware, it might not have direct access to the internet
-            if ((dev.fw != ShellyFirmwareAPI.getLatestVersionForModel(dev.type)) && (dev.status.has_update is false))
+            if ((dev.fw != ShellyFirmwareService.getLatestVersionForModel(dev.type)) && (dev.status.has_update is false))
             {
                 dev.update_mismatch = true;
             }
