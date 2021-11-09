@@ -1,5 +1,7 @@
 # Shelly Browser
 
+**WARNING - work in progress**
+
 Shelly Browser is a C# .NET (Core) application for Windows, to detect, view and upgrade Shelly (v1) devices.
 
 ![Screenshot of Shelly Browser](ShellyBrowser.png)
